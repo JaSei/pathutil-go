@@ -42,8 +42,7 @@ func (path *Path) CopyFile(dst string) (*Path, error) {
 	}
 	defer originalFile.Close()
 
-	newFile, err := os.Create(dst)
-	if err != nil {
+	if newFile, err := os.Create(dst); err != nil {
 		return nil, err
 	}
 	defer newFile.Close()
