@@ -28,21 +28,36 @@ func (path *Path) String() string {
 }
 
 func (path *Path) Basename() string {
+	if path.Path == "/" {
+		return ""
+	}
+
 	return filepath.Base(path.Path)
 }
 
-func (path *Path) CopyFile(dst string) (*Path, error) {
-	if isDir, _ := NewPath(dst).IsDir(); isDir {
-		dst = NewPath(dst, path.Basename()).String()
+func (srcPath *Path) CopyFile(dst string) (*Path, error) {
+	dstPath, err := NewPath(dst)
+	if err != nil {
+		return nil, err
 	}
 
-	originalFile, err := os.Open(path.String())
+	if dstPath.IsDir() {
+		dstPath, err := NewPath(dst, srcPath.Basename())
+		if err != nil {
+			return nil, err
+		} else {
+			dst = dstPath.String()
+		}
+	}
+
+	originalFile, err := os.Open(srcPath.String())
 	if err != nil {
 		return nil, err
 	}
 	defer originalFile.Close()
 
-	if newFile, err := os.Create(dst); err != nil {
+	newFile, err := os.Create(dst)
+	if err != nil {
 		return nil, err
 	}
 	defer newFile.Close()
@@ -59,5 +74,5 @@ func (path *Path) CopyFile(dst string) (*Path, error) {
 		return nil, err
 	}
 
-	return NewPath(dst), nil
+	return NewPath(dst)
 }
