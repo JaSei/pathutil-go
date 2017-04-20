@@ -1,0 +1,13 @@
+{
+    "file_id": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "sources": [
+        {
+            "path": "c:\\tmp\\empty_file",
+            "size": 0
+        },
+        {
+            "path": "/tmp/empty_file",
+            "size": 0
+        }
+    ]
+}
