@@ -28,5 +28,5 @@ func (path *Path) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
 		return nil
 	}
 
-	return filepath.Walk(path.String(), walkFn)
+	filepath.Walk(path.String(), walkFn)
 }

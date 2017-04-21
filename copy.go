@@ -24,7 +24,7 @@ func (path *Path) RemoveTree() error {
 }
 
 func (path *Path) String() string {
-	return filepath.Clean(path.Path)
+	return filepath.FromSlash(filepath.Clean(path.Path))
 }
 
 func (path *Path) Basename() string {

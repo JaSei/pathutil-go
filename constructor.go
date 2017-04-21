@@ -14,7 +14,7 @@ import (
 //
 func NewPath(path ...string) (*Path, error) {
 	newPath := new(Path)
-	newPath.Path = filepath.Join(path...)
+	newPath.Path = filepath.ToSlash(filepath.Join(path...))
 
 	if len(newPath.Path) == 0 {
 		return nil, errors.New("Paths requires defined, positive-lengths parts")
