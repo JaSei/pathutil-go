@@ -21,6 +21,11 @@ func (path *Path) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
 			return err
 		}
 
+		//skip self path
+		if file == path.String() {
+			return nil
+		}
+
 		path, err := NewPath(file)
 
 		visitFunc(path)
