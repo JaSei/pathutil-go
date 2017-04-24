@@ -3,7 +3,7 @@ package path_test
 import (
 	"crypto"
 	"fmt"
-	pathutils "github.com/jasei/path-go"
+	pathutils "github.com/JaSei/path-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -2,7 +2,7 @@ package path_test
 
 import (
 	"encoding/json"
-	"github.com/jasei/path-go"
+	"github.com/JaSei/path-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
