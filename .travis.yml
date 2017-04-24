@@ -7,7 +7,7 @@ go:
   - master
 
 before_install:
-  - go get -t -v ./...
+  - go get -t -v
 
 script:
   - ./test.sh
