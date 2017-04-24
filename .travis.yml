@@ -11,7 +11,7 @@ go:
   - tip
 
 install:
-  - go get -t -v ./...
+  - go get -t -v -d ./...
 
 script:
   - ./test.sh
