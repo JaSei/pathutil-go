@@ -15,10 +15,11 @@ import (
 //		fmt.Println(hash.HexSum())
 
 func (path *Path) Crypto(hash crypto.Hash) (*CryptoHash, error) {
-	reader, err := path.OpenReader()
+	reader, file, err := path.OpenReader()
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 
 	h := hash.New()
 

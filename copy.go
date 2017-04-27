@@ -3,37 +3,7 @@ package path
 import (
 	"io"
 	"os"
-	"path/filepath"
 )
-
-// Remove file
-//	err := path.Remove()
-// like os.Remove
-
-func (path *Path) Remove() error {
-	path.file = nil
-	return os.Remove(path.Path)
-}
-
-// Remove tree of files
-//  err := path.RemoveTree
-// like os.RemoveAll
-func (path *Path) RemoveTree() error {
-	path.file = nil
-	return os.RemoveAll(path.Path)
-}
-
-func (path *Path) String() string {
-	return filepath.FromSlash(filepath.Clean(path.Path))
-}
-
-func (path *Path) Basename() string {
-	if path.Path == "/" {
-		return ""
-	}
-
-	return filepath.Base(path.Path)
-}
 
 func (srcPath *Path) CopyFile(dst string) (*Path, error) {
 	dstPath, err := NewPath(dst)

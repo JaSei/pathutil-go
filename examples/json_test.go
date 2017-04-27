@@ -29,11 +29,11 @@ func TestLoadJsonViaReader(t *testing.T) {
 	path, err := path.NewPath("example.json")
 	assert.Nil(t, err)
 
-	reader, err := path.OpenReader()
-	defer func() {
-		assert.Nil(t, path.Close())
-	}()
+	reader, file, err := path.OpenReader()
 	assert.Nil(t, err)
+	defer func() {
+		assert.Nil(t, file.Close())
+	}()
 	assert.NotNil(t, reader)
 
 	decodedJson := new(FileInfo)

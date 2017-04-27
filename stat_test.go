@@ -7,8 +7,8 @@ import (
 )
 
 func TestExists(t *testing.T) {
-	path, _ := NewPath("copy_test.go")
-	assert.Exactly(t, true, path.Exists(), "this test exists")
+	path, _ := NewPath("stat_test.go")
+	assert.Exactly(t, true, path.Exists(), "file exists")
 	path, _ = NewPath("/sdlkfjsflsjfsl")
 	assert.Exactly(t, false, path.Exists(), "wired root dir don't exists")
 	path, _ = NewPath(os.TempDir())
@@ -19,7 +19,7 @@ func TestIsDir(t *testing.T) {
 	path, _ := NewPath(os.TempDir())
 	assert.Exactly(t, true, path.IsDir(), "temp dir is dir")
 
-	path, _ = NewPath("copy_test.go")
+	path, _ = NewPath("stat_test.go")
 	assert.Exactly(t, false, path.IsDir(), "this test file isn't dir")
 
 	path, _ = NewPath("/safjasfjalfja")
@@ -30,7 +30,7 @@ func TestIsFile(t *testing.T) {
 	path, _ := NewPath(os.TempDir())
 	assert.Exactly(t, false, path.IsFile(), "temp dir is dir - no file")
 
-	path, _ = NewPath("copy_test.go")
+	path, _ = NewPath("stat_test.go")
 	assert.Exactly(t, true, path.IsFile(), "this test file is file")
 
 	path, _ = NewPath("/safjasfjalfja")
@@ -46,7 +46,7 @@ func TestIsRegularFile(t *testing.T) {
 	path, _ := NewPath(os.TempDir())
 	assert.Exactly(t, false, path.IsRegularFile(), "temp dir is dir - no file")
 
-	path, _ = NewPath("copy_test.go")
+	path, _ = NewPath("stat_test.go")
 	assert.Exactly(t, true, path.IsRegularFile(), "this test file is file")
 
 	path, _ = NewPath("/safjasfjalfja")
