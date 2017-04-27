@@ -1,4 +1,4 @@
-package path
+package utilpath
 
 import (
 	"bufio"
@@ -18,7 +18,7 @@ import (
 //		panic(err)
 //	}
 //	defer file.Close()
-
+//
 func (path *Path) OpenReader() (io.Reader, *os.File, error) {
 	file, err := os.Open(path.String())
 	if err != nil {
@@ -30,6 +30,8 @@ func (path *Path) OpenReader() (io.Reader, *os.File, error) {
 	return bufio.NewReader(file), file, nil
 }
 
+// Slurp read all file
+// like ioutil.ReadFile
 func (path *Path) Slurp() ([]byte, error) {
 	return ioutil.ReadFile(path.String())
 }

@@ -1,8 +1,8 @@
-package path_test
+package utilpath_test
 
 import (
 	"encoding/json"
-	"github.com/JaSei/path-go"
+	"github.com/JaSei/utilpath"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -26,7 +26,7 @@ var expected = FileInfo{
 }
 
 func TestLoadJsonViaReader(t *testing.T) {
-	path, err := path.NewPath("example.json")
+	path, err := utilpath.NewPath("example.json")
 	assert.Nil(t, err)
 
 	reader, file, err := path.OpenReader()
@@ -47,7 +47,7 @@ func TestLoadJsonViaReader(t *testing.T) {
 }
 
 func TestLoadJsonViaSlurp(t *testing.T) {
-	path, err := path.NewPath("example.json")
+	path, err := utilpath.NewPath("example.json")
 	assert.Nil(t, err)
 
 	jsonBytes, err := path.Slurp()

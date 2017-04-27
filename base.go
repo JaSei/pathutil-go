@@ -1,4 +1,4 @@
-package path
+package utilpath
 
 import (
 	"os"
@@ -8,7 +8,6 @@ import (
 // Remove file
 //	err := path.Remove()
 // like os.Remove
-
 func (path *Path) Remove() error {
 	path.file = nil
 	return os.Remove(path.Path)
@@ -34,6 +33,8 @@ func (path *Path) Canonpath() string {
 	return filepath.FromSlash(filepath.Clean(path.Path))
 }
 
+// Basename
+// like path/filepath.Base
 func (path *Path) Basename() string {
 	if path.Path == "/" {
 		return ""

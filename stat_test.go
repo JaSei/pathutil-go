@@ -1,4 +1,4 @@
-package path
+package utilpath
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -34,7 +34,7 @@ func TestIsFile(t *testing.T) {
 	assert.Exactly(t, true, path.IsFile(), "this test file is file")
 
 	path, _ = NewPath("/safjasfjalfja")
-	assert.Exactly(t, false, path.IsFile(), "unexists somethings isn't file")
+	assert.Exactly(t, false, path.IsFile(), "unexists something isn't file")
 
 	path, _ = NewPath("/dev/zero")
 	assert.Exactly(t, true, path.IsFile(), "/dev/zero is file")
@@ -50,10 +50,10 @@ func TestIsRegularFile(t *testing.T) {
 	assert.Exactly(t, true, path.IsRegularFile(), "this test file is file")
 
 	path, _ = NewPath("/safjasfjalfja")
-	assert.Exactly(t, false, path.IsRegularFile(), "unexists somethings isn't file")
+	assert.Exactly(t, false, path.IsRegularFile(), "unexists something isn't file")
 
 	path, _ = NewPath("/dev/zero")
-	assert.Exactly(t, false, path.IsRegularFile(), "/dev/zero is file")
+	assert.Exactly(t, false, path.IsRegularFile(), "/dev/zero isn't regular file file")
 
 	//symlink test
 }
