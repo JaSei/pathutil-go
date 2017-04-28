@@ -1,4 +1,4 @@
-# pathutil
+# pathutil-go
 
 [![Release](https://img.shields.io/github/release/JaSei/pathutil-go.svg?style=flat-square)](https://github.com/JaSei/pathutil-go/releases/latest)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
