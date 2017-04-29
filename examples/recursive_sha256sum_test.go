@@ -1,19 +1,19 @@
-package utilpath_test
+package pathutil_test
 
 import (
 	"crypto"
 	"fmt"
-	"github.com/JaSei/utilpath"
+	"github.com/JaSei/pathutil"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestVisitRecursiveAndHashAllFiles(t *testing.T) {
-	path, err := utilpath.NewPath("/tmp")
+	path, err := pathutil.NewPath("/tmp")
 	assert.Nil(t, err)
 
 	path.Visit(
-		func(path *utilpath.Path) {
+		func(path *pathutil.Path) {
 			if path.IsDir() {
 				return
 			}
@@ -26,6 +26,6 @@ func TestVisitRecursiveAndHashAllFiles(t *testing.T) {
 				fmt.Println(err)
 			}
 		},
-		utilpath.VisitOpt{Recurse: true},
+		pathutil.VisitOpt{Recurse: true},
 	)
 }

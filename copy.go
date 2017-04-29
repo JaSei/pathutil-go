@@ -1,4 +1,4 @@
-package utilpath
+package pathutil
 
 import (
 	"io"
