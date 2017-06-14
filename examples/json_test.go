@@ -2,7 +2,7 @@ package pathutil_test
 
 import (
 	"encoding/json"
-	"github.com/JaSei/pathutil"
+	"github.com/JaSei/pathutil-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -9,7 +9,6 @@ import (
 //	err := path.Remove()
 // like os.Remove
 func (path *Path) Remove() error {
-	path.file = nil
 	return os.Remove(path.Path)
 }
 
@@ -17,7 +16,6 @@ func (path *Path) Remove() error {
 //  err := path.RemoveTree
 // like os.RemoveAll
 func (path *Path) RemoveTree() error {
-	path.file = nil
 	return os.RemoveAll(path.Path)
 }
 

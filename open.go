@@ -25,9 +25,33 @@ func (path *Path) OpenReader() (io.Reader, *os.File, error) {
 		return nil, nil, err
 	}
 
-	path.file = file
-
 	return bufio.NewReader(file), file, nil
+}
+
+// OpenWriter retun bufio io.Writer
+// because bufio io.Writer don't implement Close method,
+// OpenWriter returns *os.File too
+//
+// for example:
+//	path, _ := NewFilePath(FilePathOpt{})
+//	writer, file, err := path.OpenWriter()
+//	if err != nil {
+//		panic(err)
+//	}
+//	defer func(){
+//		file.Close()
+//		file.Sync()
+//	}()
+//
+//  writer.Write(some_bytes)
+//
+func (path *Path) OpenWriter() (io.Writer, *os.File, error) {
+	file, err := os.Open(path.String())
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return bufio.NewWriter(file), file, nil
 }
 
 // Slurp read all file
@@ -69,4 +93,22 @@ func (path *Path) Lines() ([]string, error) {
 	})
 
 	return lines, linesFuncError
+}
+
+// CopyFrom copy stream from reader to path
+// (file after copy close and sync)
+func (path *Path) CopyFrom(reader io.Reader) (int64, error) {
+	writer, file, err := path.OpenWriter()
+	if err != nil {
+		return 0, err
+	}
+
+	defer func() {
+		file.Close()
+		file.Sync()
+	}()
+
+	copyied, err := io.Copy(writer, reader)
+
+	return copyied, err
 }
