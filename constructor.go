@@ -15,7 +15,8 @@ import (
 //
 func NewPath(path ...string) (*Path, error) {
 	newPath := new(Path)
-	newPath.Path = strings.Replace(filepath.Join(path...), "\\", "/", -1)
+
+	newPath.Path = strings.Replace(filepath.Clean(filepath.Join(path...)), "\\", "/", -1)
 
 	if len(newPath.Path) == 0 {
 		return nil, errors.New("Paths requires defined, positive-lengths parts")

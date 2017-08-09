@@ -23,7 +23,7 @@ func (path *Path) RemoveTree() error {
 // this representation is linux like (slash as separator)
 // for os specific string use Canonpath method
 func (path *Path) String() string {
-	return filepath.Clean(path.Path)
+	return path.Path
 }
 
 // Canonpath retrun path with right os separator
