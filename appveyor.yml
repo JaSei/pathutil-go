@@ -1,6 +1,6 @@
 version: "{build}"
 
-clone_folder: c:\go\src\github.com\JaSei\path-go
+clone_folder: c:\go\src\github.com\JaSei\pathutil-go
 
 #os: Windows Server 2012 R2
 platform: x64
