@@ -3,6 +3,7 @@ package pathutil
 import (
 	"github.com/stretchr/testify/assert"
 	"os"
+	"runtime"
 	"testing"
 )
 
@@ -36,8 +37,10 @@ func TestIsFile(t *testing.T) {
 	path, _ = NewPath("/safjasfjalfja")
 	assert.Exactly(t, false, path.IsFile(), "unexists something isn't file")
 
-	path, _ = NewPath("/dev/zero")
-	assert.Exactly(t, true, path.IsFile(), "/dev/zero is file")
+	if runtime.GOOS != "windows" {
+		path, _ = NewPath("/dev/zero")
+		assert.Exactly(t, true, path.IsFile(), "/dev/zero is file")
+	}
 
 	//symlink test
 }

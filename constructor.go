@@ -46,7 +46,5 @@ func NewTempFile(options TempFileOpt) (*Path, error) {
 		return nil, err
 	}
 
-	return &Path{
-		Path: file.Name(),
-	}, nil
+	return NewPath(file.Name())
 }
