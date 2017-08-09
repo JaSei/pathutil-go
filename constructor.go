@@ -16,11 +16,12 @@ import (
 func NewPath(path ...string) (*Path, error) {
 	newPath := new(Path)
 
-	newPath.Path = strings.Replace(filepath.Clean(filepath.Join(path...)), "\\", "/", -1)
-
-	if len(newPath.Path) == 0 {
+	joinPath := filepath.Join(path...)
+	if len(joinPath) == 0 {
 		return nil, errors.New("Paths requires defined, positive-lengths parts")
 	}
+
+	newPath.Path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
 
 	return newPath, nil
 }
