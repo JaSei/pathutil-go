@@ -23,7 +23,7 @@ func TestSlurp(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	ctx, err := path.Slurp()
+	ctx, err := path.SlurpBytes()
 
 	assert.Equal(t, 1066, len(ctx), "read LICENSE file")
 }
@@ -52,4 +52,16 @@ func TestLines(t *testing.T) {
 	assert.Nil(t, linesFuncError)
 	assert.Equal(t, 21, len(lines))
 	assert.Equal(t, "MIT License", lines[0], "string without new line on end")
+}
+
+func TestSpew(t *testing.T) {
+	temp, err := NewTempFile(TempFileOpt{})
+	assert.NoError(t, err)
+
+	err = temp.Spew("kukuc")
+	assert.NoError(t, err)
+
+	ctx, err := temp.Slurp()
+	assert.NoError(t, err)
+	assert.Equal(t, "kukuc", ctx)
 }

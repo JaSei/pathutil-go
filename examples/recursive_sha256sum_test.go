@@ -9,7 +9,7 @@ import (
 )
 
 func TestVisitRecursiveAndHashAllFiles(t *testing.T) {
-	path, err := pathutil.NewPath("/tmp")
+	path, err := pathutil.NewPath("tree")
 	assert.Nil(t, err)
 
 	path.Visit(

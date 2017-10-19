@@ -54,8 +54,57 @@ func (path *Path) OpenWriter() (*os.File, error) {
 
 // Slurp read all file
 // like ioutil.ReadFile
-func (path *Path) Slurp() ([]byte, error) {
+func (path *Path) Slurp() (string, error) {
+	bytes, err := path.SlurpBytes()
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes[:]), nil
+}
+
+func (path *Path) SlurpBytes() ([]byte, error) {
 	return ioutil.ReadFile(path.String())
+}
+
+// Spew write string to file
+func (path *Path) Spew(content string) error {
+	file, err := path.OpenWriter()
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := file.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	if _, err := file.WriteString(content); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SpewBytes write bytes to file
+func (path *Path) SpewBytes(bytes []byte) error {
+	file, err := path.OpenWriter()
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := file.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	if _, err := file.Write(bytes); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Read lines in file and call linesFunc with line parameter
