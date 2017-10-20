@@ -50,7 +50,7 @@ func TestLoadJsonViaSlurp(t *testing.T) {
 	path, err := pathutil.NewPath("example.json")
 	assert.Nil(t, err)
 
-	jsonBytes, err := path.Slurp()
+	jsonBytes, err := path.SlurpBytes()
 	assert.Nil(t, err)
 
 	decodedJson := new(FileInfo)
