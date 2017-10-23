@@ -31,6 +31,11 @@ func NewPath(path ...string) (*Path, error) {
 // for cleanup use defer
 //		temp, err := NewTempFile(TempFileOpt{})
 //		defer temp.Remove()
+//
+// if you need only temp file name, you must delete file
+//		temp, err := NewTempFile(TempFileOpt{})
+//		temp.Remove()
+//
 
 func NewTempFile(options TempFileOpt) (*Path, error) {
 	dir := options.Dir
