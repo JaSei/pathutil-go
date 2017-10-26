@@ -8,7 +8,7 @@ import (
 
 func TestCopyFileDstFileExists(t *testing.T) {
 	src, _ := NewPath("copy_test.go")
-	dst, err := NewTempFile(TempFileOpt{})
+	dst, err := NewTempFile(TempOpt{})
 	assert.Nil(t, err)
 	defer dst.Remove()
 

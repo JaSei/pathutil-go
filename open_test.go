@@ -55,7 +55,7 @@ func TestLines(t *testing.T) {
 }
 
 func TestSpew(t *testing.T) {
-	temp, err := NewTempFile(TempFileOpt{})
+	temp, err := NewTempFile(TempOpt{})
 	assert.NoError(t, err)
 
 	err = temp.Spew("kukuc")

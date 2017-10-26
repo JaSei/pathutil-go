@@ -1,11 +1,11 @@
 package pathutil
 
 import (
-	"errors"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // NewPath construct *Path
@@ -29,7 +29,7 @@ func NewPath(path ...string) (*Path, error) {
 // NewTempFile create temp file
 //
 // for cleanup use defer
-//		temp, err := NewTempFile(TempFileOpt{})
+//		temp, err := NewTempFile(TempOpt{})
 //		defer temp.Remove()
 //
 // if you need only temp file name, you must delete file
@@ -37,19 +37,27 @@ func NewPath(path ...string) (*Path, error) {
 //		temp.Remove()
 //
 
-func NewTempFile(options TempFileOpt) (*Path, error) {
-	dir := options.Dir
-
-	if dir == "" {
-		dir = os.TempDir()
+func NewTempFile(options TempOpt) (*Path, error) {
+	file, err := ioutil.TempFile(options.Dir, options.Prefix)
+	if err != nil {
+		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", options)
 	}
 
-	file, err := ioutil.TempFile(dir, options.Prefix)
 	defer file.Close()
 
+	return NewPath(file.Name())
+}
+
+// NewTempDir create temp directory
+//
+// for cleanup use `defer`
+// 	tempdir, err := pathutil.NewTempDir(TempOpt{})
+//  defer tempdir.RemoveTree()
+func NewTempDir(options TempOpt) (*Path, error) {
+	dir, err := ioutil.TempDir(options.Dir, options.Prefix)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", options)
 	}
 
-	return NewPath(file.Name())
+	return NewPath(dir)
 }

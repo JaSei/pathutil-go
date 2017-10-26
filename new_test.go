@@ -16,19 +16,19 @@ func TestNewPath(t *testing.T) {
 }
 
 func TestNewTempFile(t *testing.T) {
-	temp, err := NewTempFile(TempFileOpt{})
+	temp, err := NewTempFile(TempOpt{})
 	defer temp.Remove()
 	assert.NotNil(t, temp)
 	assert.Nil(t, err)
 
-	temp, err = NewTempFile(TempFileOpt{Dir: "."})
+	temp, err = NewTempFile(TempOpt{Dir: "."})
 	defer temp.Remove()
 	assert.NotNil(t, temp)
 	assert.Nil(t, err)
 }
 
 func TestTempFile(t *testing.T) {
-	temp, err := NewTempFile(TempFileOpt{Prefix: "bla"})
+	temp, err := NewTempFile(TempOpt{Prefix: "bla"})
 	defer temp.Remove()
 
 	assert.NotNil(t, temp)
