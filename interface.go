@@ -53,4 +53,7 @@ type Path interface {
 
 	Lines() ([]string, error)
 	LinesWalker(LinesFunc) error
+
+	Child(...string) (Path, error)
+	Children() ([]Path, error)
 }

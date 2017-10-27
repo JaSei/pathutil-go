@@ -8,11 +8,14 @@ import (
 func TestNewPath(t *testing.T) {
 	path, err := NewPath("")
 	assert.Nil(t, path)
-	assert.NotNil(t, err)
+	assert.Error(t, err)
 
 	path, err = NewPath("test")
 	assert.NotNil(t, path)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
+
+	_, err = NewPath("test", "")
+	assert.Error(t, err)
 }
 
 func TestNewTempFile(t *testing.T) {

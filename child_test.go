@@ -1,0 +1,45 @@
+package pathutil
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestChild(t *testing.T) {
+	tempdir, err := NewTempDir(TempOpt{})
+	assert.NoError(t, err)
+
+	defer func() {
+		assert.NoError(t, tempdir.RemoveTree())
+	}()
+
+	kukPath, err := tempdir.Child("KUK", "PUK")
+	assert.NoError(t, err)
+	assert.NoError(t, kukPath.MakePath())
+
+	assert.True(t, kukPath.Exists())
+}
+
+func TestChildren(t *testing.T) {
+	tempdir, err := NewTempDir(TempOpt{})
+	assert.NoError(t, err)
+
+	defer func() {
+		assert.NoError(t, tempdir.RemoveTree())
+	}()
+
+	a, _ := tempdir.Child("a", "c")
+	a.MakePath()
+	b, _ := tempdir.Child("b")
+	b.MakePath()
+
+	children, err := tempdir.Children()
+	assert.NoError(t, err)
+
+	assert.Len(t, children, 2)
+
+	exA, _ := NewPath("a")
+	exB, _ := NewPath("b")
+	assert.Equal(t, []Path{exA, exB}, children)
+}
