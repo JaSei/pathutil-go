@@ -9,11 +9,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-// NewPath construct *Path
+// NewPath construct Path
 //
 // for example
 //		path := NewPath("/home/test", ".vimrc")
 //
+//
+// if you can use `Path` in `NewPath`, you must use `.String()` method
 func NewPath(path ...string) (Path, error) {
 	newPath := pathImpl{}
 

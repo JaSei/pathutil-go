@@ -18,7 +18,7 @@ func (path pathImpl) Children() ([]Path, error) {
 
 	paths := make([]Path, len(files))
 	for i, fileInfo := range files {
-		path, _ := NewPath(fileInfo.Name())
+		path, _ := NewPath(path.Canonpath(), fileInfo.Name())
 		paths[i] = path
 	}
 
