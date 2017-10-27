@@ -5,6 +5,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+
+	"github.com/pkg/errors"
 )
 
 // OpenReader retun bufio io.Reader
@@ -20,9 +22,9 @@ import (
 //	defer file.Close()
 //
 func (path *Path) OpenReader() (io.Reader, *os.File, error) {
-	file, err := os.Open(path.String())
+	file, err := os.Open(path.Canonpath())
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
 	}
 
 	return bufio.NewReader(file), file, nil

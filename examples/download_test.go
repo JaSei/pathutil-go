@@ -10,10 +10,13 @@ import (
 func TestDownload(t *testing.T) {
 	response, err := http.Get("http://example.com")
 
-	assert.Nil(t, err)
+	if !assert.NoError(t, err) {
+		t.Fatal("Connectivity problem")
+	}
+
 	defer response.Body.Close()
 
-	temp, err := pathutil.NewTempFile(pathutil.TempFileOpt{})
+	temp, err := pathutil.NewTempFile(pathutil.TempOpt{})
 
 	defer temp.Remove()
 

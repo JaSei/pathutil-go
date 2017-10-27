@@ -2,9 +2,10 @@ package pathutil
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestString(t *testing.T) {

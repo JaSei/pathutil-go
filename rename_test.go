@@ -7,10 +7,10 @@ import (
 )
 
 func TestRename(t *testing.T) {
-	a, err := NewTempFile(TempFileOpt{})
+	a, err := NewTempFile(TempOpt{})
 	assert.NoError(t, err)
 
-	b, err := NewTempFile(TempFileOpt{})
+	b, err := NewTempFile(TempOpt{})
 	assert.NoError(t, err)
 	assert.NoError(t, b.Remove())
 

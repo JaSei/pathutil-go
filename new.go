@@ -2,6 +2,7 @@ package pathutil
 
 import (
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -24,6 +25,14 @@ func NewPath(path ...string) (*Path, error) {
 	newPath.Path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
 
 	return newPath, nil
+}
+
+//TempOpt is struct for configure new tempdir or tempfile
+type TempOpt struct {
+	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
+	Dir string
+	// name beginning with prefix
+	Prefix string
 }
 
 // NewTempFile create temp file
@@ -60,4 +69,14 @@ func NewTempDir(options TempOpt) (*Path, error) {
 	}
 
 	return NewPath(dir)
+}
+
+// Cwd create new path from current working directory
+func Cwd() (*Path, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, errors.Wrap(err, "Getwd fail")
+	}
+
+	return NewPath(cwd)
 }
