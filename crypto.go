@@ -14,7 +14,7 @@ import (
 //		hash, err := path.Crypto(crypto.SHA256)
 //		fmt.Println(hash.HexSum())
 
-func (path *Path) Crypto(hash crypto.Hash) (*CryptoHash, error) {
+func (path pathImpl) Crypto(hash crypto.Hash) (*CryptoHash, error) {
 	reader, file, err := path.OpenReader()
 	if err != nil {
 		return nil, err

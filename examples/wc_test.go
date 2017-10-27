@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-func wc(path *pathutil.Path) (lines, words, chars int) {
-	path.LinesFunc(func(line string) {
+func wc(path pathutil.Path) (lines, words, chars int) {
+	path.LinesWalker(func(line string) {
 		lines++
 
 		w := strings.Split(line, " ")

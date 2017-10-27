@@ -6,7 +6,7 @@ import (
 )
 
 // Stat return os.FileInfo
-func (path *Path) Stat() (os.FileInfo, error) {
+func (path pathImpl) Stat() (os.FileInfo, error) {
 	file, err := os.Open(path.Path)
 
 	if err != nil {
@@ -24,7 +24,7 @@ func (path *Path) Stat() (os.FileInfo, error) {
 
 // File or dir exists
 
-func (path *Path) Exists() bool {
+func (path pathImpl) Exists() bool {
 	if _, err := path.Stat(); os.IsNotExist(err) {
 		return false
 	}
@@ -33,7 +33,7 @@ func (path *Path) Exists() bool {
 }
 
 // IsDir return true if path is dir
-func (path *Path) IsDir() bool {
+func (path pathImpl) IsDir() bool {
 	stat, err := path.Stat()
 	if err != nil {
 		return false
@@ -44,13 +44,13 @@ func (path *Path) IsDir() bool {
 
 // IsFile return true is path exists and not dir
 // (symlinks, devs, regular files)
-func (path *Path) IsFile() bool {
+func (path pathImpl) IsFile() bool {
 	return path.Exists() && !path.IsDir()
 }
 
 // IsRegularFile return true if path is regular file
 // (wihtout devs, symlinks, ...)
-func (path *Path) IsRegularFile() bool {
+func (path pathImpl) IsRegularFile() bool {
 	stat, err := path.Stat()
 	if err != nil {
 		return false

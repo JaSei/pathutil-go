@@ -21,7 +21,7 @@ import (
 //	}
 //	defer file.Close()
 //
-func (path *Path) OpenReader() (io.Reader, *os.File, error) {
+func (path pathImpl) OpenReader() (io.Reader, *os.File, error) {
 	file, err := os.Open(path.Canonpath())
 	if err != nil {
 		return nil, nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
@@ -45,7 +45,7 @@ func (path *Path) OpenReader() (io.Reader, *os.File, error) {
 //
 //  writer.Write(some_bytes)
 //
-func (path *Path) OpenWriter() (*os.File, error) {
+func (path pathImpl) OpenWriter() (*os.File, error) {
 	file, err := os.OpenFile(path.String(), os.O_RDWR|os.O_CREATE, 0775)
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (path *Path) OpenWriter() (*os.File, error) {
 
 // Slurp read all file
 // like ioutil.ReadFile
-func (path *Path) Slurp() (string, error) {
+func (path pathImpl) Slurp() (string, error) {
 	bytes, err := path.SlurpBytes()
 	if err != nil {
 		return "", err
@@ -65,12 +65,12 @@ func (path *Path) Slurp() (string, error) {
 	return string(bytes[:]), nil
 }
 
-func (path *Path) SlurpBytes() ([]byte, error) {
+func (path pathImpl) SlurpBytes() ([]byte, error) {
 	return ioutil.ReadFile(path.String())
 }
 
 // Spew write string to file
-func (path *Path) Spew(content string) error {
+func (path pathImpl) Spew(content string) error {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (path *Path) Spew(content string) error {
 }
 
 // SpewBytes write bytes to file
-func (path *Path) SpewBytes(bytes []byte) error {
+func (path pathImpl) SpewBytes(bytes []byte) error {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
@@ -109,15 +109,15 @@ func (path *Path) SpewBytes(bytes []byte) error {
 	return nil
 }
 
-// Read lines in file and call linesFunc with line parameter
+// LinesWalker read lines in file and call LinesFunc with line parameter
 //
 // for example:
 //	lines := make([]string, 0)
 //
-//	linesFuncError := path.LinesFunc(func(line string) {
+//	linesFuncError := path.LinesWalker(func(line string) {
 //		lines = append(lines, line)
 //	})
-func (path *Path) LinesFunc(linesFunc func(string)) error {
+func (path pathImpl) LinesWalker(linesFunc LinesFunc) error {
 	reader, file, err := path.OpenReader()
 	if err != nil {
 		return err
@@ -134,10 +134,10 @@ func (path *Path) LinesFunc(linesFunc func(string)) error {
 }
 
 // Read all lines and return as array of lines
-func (path *Path) Lines() ([]string, error) {
+func (path pathImpl) Lines() ([]string, error) {
 	lines := make([]string, 0)
 
-	linesFuncError := path.LinesFunc(func(line string) {
+	linesFuncError := path.LinesWalker(func(line string) {
 		lines = append(lines, line)
 	})
 
@@ -146,7 +146,7 @@ func (path *Path) Lines() ([]string, error) {
 
 // CopyFrom copy stream from reader to path
 // (file after copy close and sync)
-func (path *Path) CopyFrom(reader io.Reader) (int64, error) {
+func (path pathImpl) CopyFrom(reader io.Reader) (int64, error) {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return 0, err

@@ -28,13 +28,13 @@ func TestSlurp(t *testing.T) {
 	assert.Equal(t, 1066, len(ctx), "read LICENSE file")
 }
 
-func TestLinesFunc(t *testing.T) {
+func TestLinesWalker(t *testing.T) {
 	path, err := NewPath("./LICENSE")
 
 	assert.Nil(t, err)
 
 	countOfLines := 0
-	linesFuncError := path.LinesFunc(func(line string) {
+	linesFuncError := path.LinesWalker(func(line string) {
 		countOfLines++
 	})
 

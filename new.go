@@ -14,8 +14,8 @@ import (
 // for example
 //		path := NewPath("/home/test", ".vimrc")
 //
-func NewPath(path ...string) (*Path, error) {
-	newPath := new(Path)
+func NewPath(path ...string) (Path, error) {
+	newPath := pathImpl{}
 
 	joinPath := filepath.Join(path...)
 	if len(joinPath) == 0 {
@@ -46,7 +46,7 @@ type TempOpt struct {
 //		temp.Remove()
 //
 
-func NewTempFile(options TempOpt) (*Path, error) {
+func NewTempFile(options TempOpt) (Path, error) {
 	file, err := ioutil.TempFile(options.Dir, options.Prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", options)
@@ -62,7 +62,7 @@ func NewTempFile(options TempOpt) (*Path, error) {
 // for cleanup use `defer`
 // 	tempdir, err := pathutil.NewTempDir(TempOpt{})
 //  defer tempdir.RemoveTree()
-func NewTempDir(options TempOpt) (*Path, error) {
+func NewTempDir(options TempOpt) (Path, error) {
 	dir, err := ioutil.TempDir(options.Dir, options.Prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", options)
@@ -72,7 +72,7 @@ func NewTempDir(options TempOpt) (*Path, error) {
 }
 
 // Cwd create new path from current working directory
-func Cwd() (*Path, error) {
+func Cwd() (Path, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, errors.Wrap(err, "Getwd fail")

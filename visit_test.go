@@ -15,7 +15,7 @@ func TestVisitFlat(t *testing.T) {
 
 	flat := make(map[string]int)
 	path.Visit(
-		func(path *Path) {
+		func(path Path) {
 			flat[path.String()] = 0
 		},
 		VisitOpt{},
@@ -41,7 +41,7 @@ func TestVisitRecurse(t *testing.T) {
 
 	flat := make(map[string]int)
 	path.Visit(
-		func(path *Path) {
+		func(path Path) {
 			flat[path.String()] = 0
 		},
 		VisitOpt{Recurse: true},

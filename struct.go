@@ -1,5 +1,5 @@
 package pathutil
 
-type Path struct {
+type pathImpl struct {
 	Path string
 }

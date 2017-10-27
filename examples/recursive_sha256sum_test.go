@@ -13,7 +13,7 @@ func TestVisitRecursiveAndHashAllFiles(t *testing.T) {
 	assert.Nil(t, err)
 
 	path.Visit(
-		func(path *pathutil.Path) {
+		func(path pathutil.Path) {
 			if path.IsDir() {
 				return
 			}
