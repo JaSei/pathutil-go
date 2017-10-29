@@ -56,4 +56,6 @@ type Path interface {
 
 	Child(...string) (Path, error)
 	Children() ([]Path, error)
+
+	Parent() (Path, error)
 }
