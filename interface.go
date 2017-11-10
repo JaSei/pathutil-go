@@ -44,6 +44,7 @@ type Path interface {
 
 	OpenReader() (io.Reader, *os.File, error)
 	OpenWriter() (*os.File, error)
+	OpenWriterAppend() (*os.File, error)
 
 	Slurp() (string, error)
 	SlurpBytes() ([]byte, error)
@@ -58,4 +59,7 @@ type Path interface {
 	Children() ([]Path, error)
 
 	Parent() Path
+
+	Append(string) error
+	AppendBytes([]byte) error
 }

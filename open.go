@@ -30,7 +30,7 @@ func (path pathImpl) OpenReader() (io.Reader, *os.File, error) {
 	return bufio.NewReader(file), file, nil
 }
 
-// OpenWriter retun *os.File
+// OpenWriter retun *os.File as new file (like `>>`)
 //
 // for example:
 //	path, _ := NewFilePath(FilePathOpt{})
@@ -46,7 +46,16 @@ func (path pathImpl) OpenReader() (io.Reader, *os.File, error) {
 //  writer.Write(some_bytes)
 //
 func (path pathImpl) OpenWriter() (*os.File, error) {
-	file, err := os.OpenFile(path.String(), os.O_RDWR|os.O_CREATE, 0775)
+	return path.openWriterFlag(os.O_RDWR | os.O_CREATE)
+}
+
+// OpenWriterAppend create new writer, similar as `OpenWriter` but append (like `>`)
+func (path pathImpl) OpenWriterAppend() (*os.File, error) {
+	return path.openWriterFlag(os.O_APPEND | os.O_CREATE | os.O_WRONLY)
+}
+
+func (path pathImpl) openWriterFlag(flag int) (*os.File, error) {
+	file, err := os.OpenFile(path.String(), flag, 0775)
 	if err != nil {
 		return nil, err
 	}
