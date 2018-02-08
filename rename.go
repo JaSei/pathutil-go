@@ -5,7 +5,7 @@ import (
 )
 
 // Rename path to new path
-func (old pathImpl) Rename(new string) (Path, error) {
+func (old PathImpl) Rename(new string) (Path, error) {
 	newPath, err := New(new)
 	if err != nil {
 		return nil, err

@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func (srcPath pathImpl) CopyFile(dst string) (Path, error) {
+func (srcPath PathImpl) CopyFile(dst string) (Path, error) {
 	dstPath, err := New(dst)
 	if err != nil {
 		return nil, err

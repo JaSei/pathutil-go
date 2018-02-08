@@ -5,7 +5,7 @@ package pathutil
 //
 // Returns a `Path` of corresponding to the parent directory of the
 // original directory or file
-func (path pathImpl) Parent() Path {
+func (path PathImpl) Parent() Path {
 	// path.String() can't be empty
 	parent, _ := New(path.String(), "..")
 	return parent

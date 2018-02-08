@@ -17,7 +17,7 @@ import (
 //
 // if you can use `Path` in `New`, you must use `.String()` method
 func New(path ...string) (Path, error) {
-	newPath := pathImpl{}
+	newPath := PathImpl{}
 
 	for index, pathChunk := range path {
 		if len(pathChunk) == 0 {
@@ -27,7 +27,7 @@ func New(path ...string) (Path, error) {
 
 	joinPath := filepath.Join(path...)
 
-	newPath.Path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
+	newPath.path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
 
 	return newPath, nil
 }

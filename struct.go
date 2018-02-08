@@ -1,5 +1,6 @@
 package pathutil
 
-type pathImpl struct {
-	Path string
+// type PathImpl implements Path interface
+type PathImpl struct {
+	path string
 }

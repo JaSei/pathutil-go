@@ -19,7 +19,7 @@ import (
 //	}
 //	defer r.Close()
 //
-func (path pathImpl) OpenReader() (io.ReadCloser, error) {
+func (path PathImpl) OpenReader() (io.ReadCloser, error) {
 	file, err := os.Open(path.Canonpath())
 	if err != nil {
 		return nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
@@ -43,16 +43,16 @@ func (path pathImpl) OpenReader() (io.ReadCloser, error) {
 //
 //  writer.Write(some_bytes)
 //
-func (path pathImpl) OpenWriter() (*os.File, error) {
+func (path PathImpl) OpenWriter() (*os.File, error) {
 	return path.openWriterFlag(os.O_RDWR | os.O_CREATE)
 }
 
 // OpenWriterAppend create new writer, similar as `OpenWriter` but append (like `>`)
-func (path pathImpl) OpenWriterAppend() (*os.File, error) {
+func (path PathImpl) OpenWriterAppend() (*os.File, error) {
 	return path.openWriterFlag(os.O_APPEND | os.O_CREATE | os.O_WRONLY)
 }
 
-func (path pathImpl) openWriterFlag(flag int) (*os.File, error) {
+func (path PathImpl) openWriterFlag(flag int) (*os.File, error) {
 	file, err := os.OpenFile(path.String(), flag, 0775)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (path pathImpl) openWriterFlag(flag int) (*os.File, error) {
 
 // Slurp read all file
 // like ioutil.ReadFile
-func (path pathImpl) Slurp() (string, error) {
+func (path PathImpl) Slurp() (string, error) {
 	bytes, err := path.SlurpBytes()
 	if err != nil {
 		return "", err
@@ -72,12 +72,12 @@ func (path pathImpl) Slurp() (string, error) {
 	return string(bytes[:]), nil
 }
 
-func (path pathImpl) SlurpBytes() ([]byte, error) {
+func (path PathImpl) SlurpBytes() ([]byte, error) {
 	return ioutil.ReadFile(path.String())
 }
 
 // Spew write string to file
-func (path pathImpl) Spew(content string) error {
+func (path PathImpl) Spew(content string) error {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (path pathImpl) Spew(content string) error {
 }
 
 // SpewBytes write bytes to file
-func (path pathImpl) SpewBytes(bytes []byte) error {
+func (path PathImpl) SpewBytes(bytes []byte) error {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
@@ -124,7 +124,7 @@ func (path pathImpl) SpewBytes(bytes []byte) error {
 //	linesFuncError := path.LinesWalker(func(line string) {
 //		lines = append(lines, line)
 //	})
-func (path pathImpl) LinesWalker(linesFunc LinesFunc) error {
+func (path PathImpl) LinesWalker(linesFunc LinesFunc) error {
 	reader, err := path.OpenReader()
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (path pathImpl) LinesWalker(linesFunc LinesFunc) error {
 }
 
 // Read all lines and return as array of lines
-func (path pathImpl) Lines() ([]string, error) {
+func (path PathImpl) Lines() ([]string, error) {
 	lines := make([]string, 0)
 
 	linesFuncError := path.LinesWalker(func(line string) {
@@ -153,7 +153,7 @@ func (path pathImpl) Lines() ([]string, error) {
 
 // CopyFrom copy stream from reader to path
 // (file after copy close and sync)
-func (path pathImpl) CopyFrom(reader io.Reader) (int64, error) {
+func (path PathImpl) CopyFrom(reader io.Reader) (int64, error) {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return 0, err

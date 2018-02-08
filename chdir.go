@@ -7,7 +7,7 @@ import (
 )
 
 // Chdir change current working directory do the path and return old current working directory
-func (path pathImpl) Chdir() (Path, error) {
+func (path PathImpl) Chdir() (Path, error) {
 	oldPath, err := Cwd()
 	if err != nil {
 		return nil, errors.Wrap(err, "Cwd fail")

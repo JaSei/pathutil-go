@@ -4,11 +4,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (path pathImpl) Append(data string) error {
+func (path PathImpl) Append(data string) error {
 	return path.AppendBytes([]byte(data))
 }
 
-func (path pathImpl) AppendBytes(data []byte) (err error) {
+func (path PathImpl) AppendBytes(data []byte) (err error) {
 	file, err := path.OpenWriterAppend()
 	if err != nil {
 		return errors.Wrap(err, "Append open failed")

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func (path pathImpl) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
+func (path PathImpl) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
 	walkFn := func(file string, info os.FileInfo, err error) error {
 		if info != nil && info.IsDir() && file != path.String() && !visitOpt.Recurse {
 			return filepath.SkipDir

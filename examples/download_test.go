@@ -1,10 +1,11 @@
 package pathutil_test
 
 import (
-	"github.com/JaSei/pathutil-go"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/JaSei/pathutil-go"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDownload(t *testing.T) {
