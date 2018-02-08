@@ -12,7 +12,7 @@ func TestParent(t *testing.T) {
 
 	assert.Equal(t, "/tmp", temp.Parent().String())
 
-	root, err := NewPath("/")
+	root, err := New("/")
 	assert.NoError(t, err)
 	assert.Equal(t, "/", root.Parent().String())
 }

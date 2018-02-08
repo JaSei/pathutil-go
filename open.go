@@ -9,25 +9,23 @@ import (
 	"github.com/pkg/errors"
 )
 
-// OpenReader retun bufio io.Reader
-// because bufio io.Reader don't implement Close method,
-// OpenReader returns *os.File too
+// OpenReader retun io.ReaderCloser
 //
 // for example:
-//	path, _ := NewPath("/bla/bla")
-//	reader, file, err := path.OpenReader()
+//	path, _ := New("/bla/bla")
+//	r, err := path.OpenReader()
 //	if err != nil {
 //		panic(err)
 //	}
-//	defer file.Close()
+//	defer r.Close()
 //
-func (path pathImpl) OpenReader() (io.Reader, *os.File, error) {
+func (path pathImpl) OpenReader() (io.ReadCloser, error) {
 	file, err := os.Open(path.Canonpath())
 	if err != nil {
-		return nil, nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
+		return nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
 	}
 
-	return bufio.NewReader(file), file, nil
+	return file, nil
 }
 
 // OpenWriter retun *os.File as new file (like `>>`)
@@ -127,11 +125,11 @@ func (path pathImpl) SpewBytes(bytes []byte) error {
 //		lines = append(lines, line)
 //	})
 func (path pathImpl) LinesWalker(linesFunc LinesFunc) error {
-	reader, file, err := path.OpenReader()
+	reader, err := path.OpenReader()
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer reader.Close()
 
 	scanner := bufio.NewScanner(reader)
 

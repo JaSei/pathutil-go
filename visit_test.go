@@ -6,7 +6,7 @@ import (
 )
 
 func TestVisitFlat(t *testing.T) {
-	path, err := NewPath("examples/tree")
+	path, err := New("examples/tree")
 
 	assert.Nil(t, err)
 	flat_expected := map[string]int{
@@ -25,7 +25,7 @@ func TestVisitFlat(t *testing.T) {
 }
 
 func TestVisitRecurse(t *testing.T) {
-	path, err := NewPath("examples/tree")
+	path, err := New("examples/tree")
 
 	assert.Nil(t, err)
 

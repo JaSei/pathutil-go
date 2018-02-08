@@ -39,7 +39,7 @@ func TestChildren(t *testing.T) {
 
 	assert.Len(t, children, 2)
 
-	exA, _ := NewPath(tempdir.String(), "a")
-	exB, _ := NewPath(tempdir.String(), "b")
+	exA, _ := New(tempdir.String(), "a")
+	exB, _ := New(tempdir.String(), "b")
 	assert.Equal(t, []Path{exA, exB}, children)
 }

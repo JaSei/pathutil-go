@@ -5,16 +5,16 @@ import (
 	"testing"
 )
 
-func TestNewPath(t *testing.T) {
-	path, err := NewPath("")
+func TestNew(t *testing.T) {
+	path, err := New("")
 	assert.Nil(t, path)
 	assert.Error(t, err)
 
-	path, err = NewPath("test")
+	path, err = New("test")
 	assert.NotNil(t, path)
 	assert.NoError(t, err)
 
-	_, err = NewPath("test", "")
+	_, err = New("test", "")
 	assert.Error(t, err)
 }
 

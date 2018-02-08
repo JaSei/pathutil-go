@@ -7,7 +7,7 @@ import (
 )
 
 func TestCopyFileDstFileExists(t *testing.T) {
-	src, _ := NewPath("copy_test.go")
+	src, _ := New("copy_test.go")
 	dst, err := NewTempFile(TempOpt{})
 	assert.Nil(t, err)
 	defer dst.Remove()
@@ -23,8 +23,8 @@ func TestCopyFileDstFileExists(t *testing.T) {
 }
 
 func TestCopyFileDstIsDir(t *testing.T) {
-	src, _ := NewPath("copy_test.go")
-	dst, _ := NewPath(os.TempDir())
+	src, _ := New("copy_test.go")
+	dst, _ := New(os.TempDir())
 
 	assert.Exactly(t, true, dst.Exists(), "dst dir exists")
 	newDst, err := src.CopyFile(dst.String())

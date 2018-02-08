@@ -25,7 +25,7 @@ func wc(path pathutil.Path) (lines, words, chars int) {
 }
 
 func Test(t *testing.T) {
-	path, err := pathutil.NewPath("../LICENSE")
+	path, err := pathutil.New("../LICENSE")
 
 	assert.Nil(t, err)
 

@@ -42,7 +42,7 @@ type Path interface {
 	MakePath() error
 	MakePathMode(os.FileMode) error
 
-	OpenReader() (io.Reader, *os.File, error)
+	OpenReader() (io.ReadCloser, error)
 	OpenWriter() (*os.File, error)
 	OpenWriterAppend() (*os.File, error)
 

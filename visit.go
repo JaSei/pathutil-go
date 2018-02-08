@@ -20,7 +20,7 @@ func (path pathImpl) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
 			return nil
 		}
 
-		path, err := NewPath(file)
+		path, err := New(file)
 
 		visitFunc(path)
 

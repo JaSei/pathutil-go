@@ -26,13 +26,13 @@ var expected = FileInfo{
 }
 
 func TestLoadJsonViaReader(t *testing.T) {
-	path, err := pathutil.NewPath("example.json")
+	path, err := pathutil.New("example.json")
 	assert.Nil(t, err)
 
-	reader, file, err := path.OpenReader()
+	reader, err := path.OpenReader()
 	assert.Nil(t, err)
 	defer func() {
-		assert.Nil(t, file.Close())
+		assert.Nil(t, reader.Close())
 	}()
 	assert.NotNil(t, reader)
 
@@ -47,7 +47,7 @@ func TestLoadJsonViaReader(t *testing.T) {
 }
 
 func TestLoadJsonViaSlurp(t *testing.T) {
-	path, err := pathutil.NewPath("example.json")
+	path, err := pathutil.New("example.json")
 	assert.Nil(t, err)
 
 	jsonBytes, err := path.SlurpBytes()

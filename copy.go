@@ -6,13 +6,13 @@ import (
 )
 
 func (srcPath pathImpl) CopyFile(dst string) (Path, error) {
-	dstPath, err := NewPath(dst)
+	dstPath, err := New(dst)
 	if err != nil {
 		return nil, err
 	}
 
 	if dstPath.IsDir() {
-		dstPath, err := NewPath(dst, srcPath.Basename())
+		dstPath, err := New(dst, srcPath.Basename())
 		if err != nil {
 			return nil, err
 		} else {
@@ -44,5 +44,5 @@ func (srcPath pathImpl) CopyFile(dst string) (Path, error) {
 		return nil, err
 	}
 
-	return NewPath(dst)
+	return New(dst)
 }

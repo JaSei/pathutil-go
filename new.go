@@ -9,14 +9,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-// NewPath construct Path
+// New construct Path
 //
 // for example
-//		path := NewPath("/home/test", ".vimrc")
+//		path := New("/home/test", ".vimrc")
 //
 //
-// if you can use `Path` in `NewPath`, you must use `.String()` method
-func NewPath(path ...string) (Path, error) {
+// if you can use `Path` in `New`, you must use `.String()` method
+func New(path ...string) (Path, error) {
 	newPath := pathImpl{}
 
 	for index, pathChunk := range path {
@@ -59,7 +59,7 @@ func NewTempFile(options TempOpt) (Path, error) {
 
 	defer file.Close()
 
-	return NewPath(file.Name())
+	return New(file.Name())
 }
 
 // NewTempDir create temp directory
@@ -73,7 +73,7 @@ func NewTempDir(options TempOpt) (Path, error) {
 		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", options)
 	}
 
-	return NewPath(dir)
+	return New(dir)
 }
 
 // Cwd create new path from current working directory
@@ -83,5 +83,5 @@ func Cwd() (Path, error) {
 		return nil, errors.Wrap(err, "Getwd fail")
 	}
 
-	return NewPath(cwd)
+	return New(cwd)
 }

@@ -7,7 +7,7 @@ import (
 func (path pathImpl) Child(childName ...string) (Path, error) {
 	pathChunks := append([]string{path.String()}, childName...)
 
-	return NewPath(pathChunks...)
+	return New(pathChunks...)
 }
 
 func (path pathImpl) Children() ([]Path, error) {
@@ -18,7 +18,7 @@ func (path pathImpl) Children() ([]Path, error) {
 
 	paths := make([]Path, len(files))
 	for i, fileInfo := range files {
-		path, _ := NewPath(path.Canonpath(), fileInfo.Name())
+		path, _ := New(path.Canonpath(), fileInfo.Name())
 		paths[i] = path
 	}
 

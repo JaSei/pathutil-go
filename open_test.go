@@ -1,25 +1,22 @@
 package pathutil
 
 import (
-	"bufio"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestOpenReader(t *testing.T) {
-	path, err := NewPath("open.go")
+	path, err := New("open.go")
 
 	assert.Nil(t, err)
 
-	reader, file, err := path.OpenReader()
+	reader, err := path.OpenReader()
 	assert.Nil(t, err)
-	defer file.Close()
-
-	assert.IsType(t, new(bufio.Reader), reader)
+	defer reader.Close()
 }
 
 func TestSlurp(t *testing.T) {
-	path, err := NewPath("./LICENSE")
+	path, err := New("./LICENSE")
 
 	assert.Nil(t, err)
 
@@ -29,7 +26,7 @@ func TestSlurp(t *testing.T) {
 }
 
 func TestLinesWalker(t *testing.T) {
-	path, err := NewPath("./LICENSE")
+	path, err := New("./LICENSE")
 
 	assert.Nil(t, err)
 
@@ -43,7 +40,7 @@ func TestLinesWalker(t *testing.T) {
 }
 
 func TestLines(t *testing.T) {
-	path, err := NewPath("./LICENSE")
+	path, err := New("./LICENSE")
 
 	assert.Nil(t, err)
 
