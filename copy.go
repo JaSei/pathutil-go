@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func (srcPath PathImpl) CopyFile(dst string) (Path, error) {
+func (srcPath PathImpl) CopyFile(dst string) (p Path, err error) {
 	dstPath, err := New(dst)
 	if err != nil {
 		return nil, err
@@ -24,13 +24,21 @@ func (srcPath PathImpl) CopyFile(dst string) (Path, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer originalFile.Close()
+	defer func() {
+		if errClose := originalFile.Close(); errClose != nil {
+			err = errClose
+		}
+	}()
 
 	newFile, err := os.Create(dst)
 	if err != nil {
 		return nil, err
 	}
-	defer newFile.Close()
+	defer func() {
+		if errClose := newFile.Close(); errClose != nil {
+			err = errClose
+		}
+	}()
 
 	_, err = io.Copy(newFile, originalFile)
 	if err != nil {

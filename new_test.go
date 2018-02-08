@@ -1,8 +1,9 @@
 package pathutil
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNew(t *testing.T) {
@@ -19,20 +20,26 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewTempFile(t *testing.T) {
-	temp, err := NewTempFile(TempOpt{})
-	defer temp.Remove()
-	assert.NotNil(t, temp)
+	temp1, err := NewTempFile(TempOpt{})
+	defer func() {
+		assert.NoError(t, temp1.Remove())
+	}()
+	assert.NotNil(t, temp1)
 	assert.Nil(t, err)
 
-	temp, err = NewTempFile(TempOpt{Dir: "."})
-	defer temp.Remove()
-	assert.NotNil(t, temp)
+	temp2, err := NewTempFile(TempOpt{Dir: "."})
+	defer func() {
+		assert.NoError(t, temp2.Remove())
+	}()
+	assert.NotNil(t, temp2)
 	assert.Nil(t, err)
 }
 
 func TestTempFile(t *testing.T) {
 	temp, err := NewTempFile(TempOpt{Prefix: "bla"})
-	defer temp.Remove()
+	defer func() {
+		assert.NoError(t, temp.Remove())
+	}()
 
 	assert.NotNil(t, temp)
 	assert.Nil(t, err)

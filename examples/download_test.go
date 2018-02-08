@@ -15,11 +15,15 @@ func TestDownload(t *testing.T) {
 		t.Fatal("Connectivity problem")
 	}
 
-	defer response.Body.Close()
+	defer func() {
+		assert.NoError(t, response.Body.Close())
+	}()
 
 	temp, err := pathutil.NewTempFile(pathutil.TempOpt{})
 
-	defer temp.Remove()
+	defer func() {
+		assert.NoError(t, temp.Remove())
+	}()
 
 	assert.Nil(t, err)
 

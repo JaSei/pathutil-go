@@ -10,13 +10,13 @@ func TestAppend(t *testing.T) {
 	temp, err := NewTempFile(TempOpt{})
 	assert.NoError(t, err)
 
-	temp.Append("test\n")
+	assert.NoError(t, temp.Append("test\n"))
 
 	content, err := temp.Slurp()
 	assert.NoError(t, err)
 	assert.Equal(t, "test\n", content)
 
-	temp.Append("test2")
+	assert.NoError(t, temp.Append("test2"))
 
 	content, err = temp.Slurp()
 	assert.NoError(t, err)

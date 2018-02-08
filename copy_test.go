@@ -1,16 +1,19 @@
 package pathutil
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCopyFileDstFileExists(t *testing.T) {
 	src, _ := New("copy_test.go")
 	dst, err := NewTempFile(TempOpt{})
 	assert.Nil(t, err)
-	defer dst.Remove()
+	defer func() {
+		assert.NoError(t, dst.Remove())
+	}()
 
 	assert.Exactly(t, true, dst.Exists(), "dst file exists before copy")
 	newDst, err := src.CopyFile(dst.String())
@@ -32,7 +35,9 @@ func TestCopyFileDstIsDir(t *testing.T) {
 		return
 	}
 
-	defer newDst.Remove()
+	defer func() {
+		assert.NoError(t, newDst.Remove())
+	}()
 
 	assert.Exactly(t, true, newDst.Exists(), "dst after copy exists")
 	assert.Exactly(t, true, newDst.IsFile(), "dst is file")

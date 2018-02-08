@@ -173,7 +173,7 @@ for cleanup use `defer`
 #### func  NewTempFile
 
 ```go
-func NewTempFile(options TempOpt) (Path, error)
+func NewTempFile(options TempOpt) (p Path, err error)
 ```
 
 #### type PathImpl
@@ -234,20 +234,20 @@ func (path PathImpl) Children() ([]Path, error)
 #### func (PathImpl) CopyFile
 
 ```go
-func (srcPath PathImpl) CopyFile(dst string) (Path, error)
+func (srcPath PathImpl) CopyFile(dst string) (p Path, err error)
 ```
 
 #### func (PathImpl) CopyFrom
 
 ```go
-func (path PathImpl) CopyFrom(reader io.Reader) (int64, error)
+func (path PathImpl) CopyFrom(reader io.Reader) (copyied int64, err error)
 ```
 CopyFrom copy stream from reader to path (file after copy close and sync)
 
 #### func (PathImpl) Crypto
 
 ```go
-func (path PathImpl) Crypto(hash crypto.Hash) (*CryptoHash, error)
+func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error)
 ```
 
 #### func (PathImpl) Exists
@@ -287,7 +287,7 @@ Read all lines and return as array of lines
 #### func (PathImpl) LinesWalker
 
 ```go
-func (path PathImpl) LinesWalker(linesFunc LinesFunc) error
+func (path PathImpl) LinesWalker(linesFunc LinesFunc) (err error)
 ```
 LinesWalker read lines in file and call LinesFunc with line parameter
 
@@ -416,14 +416,14 @@ func (path PathImpl) SlurpBytes() ([]byte, error)
 #### func (PathImpl) Spew
 
 ```go
-func (path PathImpl) Spew(content string) error
+func (path PathImpl) Spew(content string) (err error)
 ```
 Spew write string to file
 
 #### func (PathImpl) SpewBytes
 
 ```go
-func (path PathImpl) SpewBytes(bytes []byte) error
+func (path PathImpl) SpewBytes(bytes []byte) (err error)
 ```
 SpewBytes write bytes to file
 

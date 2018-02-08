@@ -77,43 +77,37 @@ func (path PathImpl) SlurpBytes() ([]byte, error) {
 }
 
 // Spew write string to file
-func (path PathImpl) Spew(content string) error {
+func (path PathImpl) Spew(content string) (err error) {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
 	}
 
 	defer func() {
-		if err := file.Close(); err != nil {
-			panic(err)
+		if errClose := file.Close(); errClose != nil {
+			err = errClose
 		}
 	}()
 
-	if _, err := file.WriteString(content); err != nil {
-		return err
-	}
-
-	return nil
+	_, err = file.WriteString(content)
+	return err
 }
 
 // SpewBytes write bytes to file
-func (path PathImpl) SpewBytes(bytes []byte) error {
+func (path PathImpl) SpewBytes(bytes []byte) (err error) {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return err
 	}
 
 	defer func() {
-		if err := file.Close(); err != nil {
-			panic(err)
+		if errClose := file.Close(); errClose != nil {
+			err = errClose
 		}
 	}()
 
-	if _, err := file.Write(bytes); err != nil {
-		return err
-	}
-
-	return nil
+	_, err = file.Write(bytes)
+	return err
 }
 
 // LinesWalker read lines in file and call LinesFunc with line parameter
@@ -124,12 +118,16 @@ func (path PathImpl) SpewBytes(bytes []byte) error {
 //	linesFuncError := path.LinesWalker(func(line string) {
 //		lines = append(lines, line)
 //	})
-func (path PathImpl) LinesWalker(linesFunc LinesFunc) error {
+func (path PathImpl) LinesWalker(linesFunc LinesFunc) (err error) {
 	reader, err := path.OpenReader()
 	if err != nil {
 		return err
 	}
-	defer reader.Close()
+	defer func() {
+		if errClose := reader.Close(); errClose != nil {
+			err = errClose
+		}
+	}()
 
 	scanner := bufio.NewScanner(reader)
 
@@ -153,18 +151,22 @@ func (path PathImpl) Lines() ([]string, error) {
 
 // CopyFrom copy stream from reader to path
 // (file after copy close and sync)
-func (path PathImpl) CopyFrom(reader io.Reader) (int64, error) {
+func (path PathImpl) CopyFrom(reader io.Reader) (copyied int64, err error) {
 	file, err := path.OpenWriter()
 	if err != nil {
 		return 0, err
 	}
 
 	defer func() {
-		file.Close()
-		file.Sync()
+		if errSync := file.Sync(); errSync != nil {
+			err = errSync
+		} else if errClose := file.Close(); errClose != nil {
+			err = errClose
+		}
+
 	}()
 
-	copyied, err := io.Copy(file, reader)
+	copyied, err = io.Copy(file, reader)
 
 	return copyied, err
 }

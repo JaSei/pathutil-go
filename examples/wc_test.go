@@ -1,14 +1,15 @@
 package pathutil_test
 
 import (
-	"github.com/JaSei/pathutil-go"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/JaSei/pathutil-go"
+	"github.com/stretchr/testify/assert"
 )
 
 func wc(path pathutil.Path) (lines, words, chars int) {
-	path.LinesWalker(func(line string) {
+	_ = path.LinesWalker(func(line string) {
 		lines++
 
 		w := strings.Split(line, " ")

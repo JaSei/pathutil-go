@@ -30,9 +30,9 @@ func TestChildren(t *testing.T) {
 	}()
 
 	a, _ := tempdir.Child("a", "c")
-	a.MakePath()
+	assert.NoError(t, a.MakePath())
 	b, _ := tempdir.Child("b")
-	b.MakePath()
+	assert.NoError(t, b.MakePath())
 
 	children, err := tempdir.Children()
 	assert.NoError(t, err)

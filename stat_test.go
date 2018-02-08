@@ -1,10 +1,11 @@
 package pathutil
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"runtime"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExists(t *testing.T) {

@@ -14,12 +14,16 @@ import (
 //		hash, err := path.Crypto(crypto.SHA256)
 //		fmt.Println(hash.HexSum())
 
-func (path PathImpl) Crypto(hash crypto.Hash) (*CryptoHash, error) {
+func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error) {
 	reader, err := path.OpenReader()
 	if err != nil {
 		return nil, err
 	}
-	defer reader.Close()
+	defer func() {
+		if errClose := reader.Close(); errClose != nil {
+			err = errClose
+		}
+	}()
 
 	h := hash.New()
 

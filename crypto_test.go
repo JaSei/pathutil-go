@@ -2,8 +2,9 @@ package pathutil
 
 import (
 	"crypto"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const emptyFileSha256Hex = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -13,9 +14,12 @@ var emptyFileSha256Bin = []uint8{0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14,
 func TestPathCrypto(t *testing.T) {
 	path, err := NewTempFile(TempOpt{})
 	assert.Nil(t, err)
-	defer path.Remove()
+	defer func() {
+		assert.NoError(t, path.Remove())
+	}()
 
 	hash, err := path.Crypto(crypto.Hash(crypto.SHA256))
+	assert.NoError(t, err)
 
 	assert.Equal(t, emptyFileSha256Hex, hash.HexSum())
 	assert.Equal(t, emptyFileSha256Bin, hash.BinSum())

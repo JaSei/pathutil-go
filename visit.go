@@ -20,12 +20,12 @@ func (path PathImpl) Visit(visitFunc VisitFunc, visitOpt VisitOpt) {
 			return nil
 		}
 
-		path, err := New(file)
+		path, _ := New(file)
 
 		visitFunc(path)
 
 		return nil
 	}
 
-	filepath.Walk(path.String(), walkFn)
+	_ = filepath.Walk(path.String(), walkFn)
 }

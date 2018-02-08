@@ -1,8 +1,9 @@
 package pathutil
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOpenReader(t *testing.T) {
@@ -12,7 +13,9 @@ func TestOpenReader(t *testing.T) {
 
 	reader, err := path.OpenReader()
 	assert.Nil(t, err)
-	defer reader.Close()
+	defer func() {
+		assert.NoError(t, reader.Close())
+	}()
 }
 
 func TestSlurp(t *testing.T) {
@@ -21,6 +24,7 @@ func TestSlurp(t *testing.T) {
 	assert.Nil(t, err)
 
 	ctx, err := path.SlurpBytes()
+	assert.NoError(t, err)
 
 	assert.Equal(t, 1066, len(ctx), "read LICENSE file")
 }

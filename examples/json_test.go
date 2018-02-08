@@ -2,9 +2,10 @@ package pathutil_test
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/JaSei/pathutil-go"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type FileSource struct {
@@ -54,7 +55,7 @@ func TestLoadJsonViaSlurp(t *testing.T) {
 	assert.Nil(t, err)
 
 	decodedJson := new(FileInfo)
-	json.Unmarshal(jsonBytes, decodedJson)
+	assert.NoError(t, json.Unmarshal(jsonBytes, decodedJson))
 
 	assert.Equal(t, &expected, decodedJson)
 
