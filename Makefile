@@ -1,10 +1,23 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
 GO18?=$(shell go version | grep -E "go1\.[89]")
+DEP?=$$(which dep)
+
+ifeq ($(OS),Windows_NT)
+	DEP_VERS=dep-windows-amd64
+else ifeq ($(OS), Darwin)
+	DEP_VERS=dep-darwin-amd64
+else
+	DEP_VERS=dep-linux-amd64
+endif
 
 setup: ## Install all the build and lint dependencies
-	go get -u github.com/golang/dep/cmd/dep
 	go get -u golang.org/x/tools/cmd/cover
+	go get -u github.com/robertkrimen/godocdown/godocdown
+	@if [ "$(DEP)" = "" ]; then\
+		curl -L https://github.com/golang/dep/releases/download/v0.4.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
+		chmod +x $$GOPATH/bin/dep;\
+	fi
 	dep ensure
 ifeq ($(GO18),) 
 	@echo no install metalinter, because metalinter need go1.8+
@@ -12,7 +25,6 @@ else
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install
 endif
-	go get -u github.com/robertkrimen/godocdown/godocdown
 
 generate: ## Generate README.md
 	godocdown >| README.md
