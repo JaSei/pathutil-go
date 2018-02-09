@@ -12,7 +12,7 @@ func (srcPath PathImpl) CopyFile(dst string) (p Path, err error) {
 	}
 
 	if dstPath.IsDir() {
-		dstPath, err := New(dst, srcPath.Basename())
+		dstPath, err = New(dst, srcPath.Basename())
 		if err != nil {
 			return nil, err
 		} else {

@@ -1,12 +1,17 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
+GO18?=$(shell go version | grep -E "go1\.[89]")
 
 setup: ## Install all the build and lint dependencies
-	go get -u github.com/alecthomas/gometalinter
 	go get -u github.com/golang/dep/cmd/dep
 	go get -u golang.org/x/tools/cmd/cover
 	dep ensure
+ifeq ($(GO18),) 
+	@echo no install metalinter, because metalinter need go1.8+
+else
+	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install
+endif
 	go get -u github.com/robertkrimen/godocdown/godocdown
 
 generate: ## Generate README.md
@@ -22,7 +27,9 @@ fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
 
 lint: ## Run all the linters
-
+ifeq ($(GO18),) 
+	@echo no run metalinter, because metalinter need go1.8+
+else
 	#https://github.com/golang/go/issues/19490
 	#--enable=vetshadow \
 
@@ -38,7 +45,10 @@ lint: ## Run all the linters
 		--enable=errcheck \
 		--enable=vet \
 		--deadline=10m \
+		--enable=vetshadow \
 		./...
+
+endif
 
 ci: test lint  ## Run all the tests and code checks
 
