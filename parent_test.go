@@ -11,7 +11,10 @@ func TestParent(t *testing.T) {
 	temp, err := NewTempDir(TempOpt{})
 	assert.NoError(t, err)
 
-	assert.Equal(t, os.TempDir(), temp.Parent().String())
+	tempDir, err := New(os.TempDir())
+	assert.NoError(t, err)
+
+	assert.Equal(t, tempDir.String(), temp.Parent().String())
 
 	root, err := New("/")
 	assert.NoError(t, err)
