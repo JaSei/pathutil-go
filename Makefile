@@ -4,7 +4,7 @@ GO18?=$(shell go version | grep -E "go1\.[89]")
 DEP?=$$(which dep)
 
 ifeq ($(OS),Windows_NT)
-	DEP_VERS=dep-windows-amd64
+	DEP_VERS=dep-windows-amd64.exe
 else ifeq ($(OS), Darwin)
 	DEP_VERS=dep-darwin-amd64
 else
