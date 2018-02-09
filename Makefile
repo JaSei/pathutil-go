@@ -2,6 +2,7 @@ HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
 GO18?=$(shell go version | grep -E "go1\.[89]")
 DEP?=$$(which dep)
+export GO15VENDOREXPERIMENT=1
 
 ifeq ($(OS),Windows_NT)
 	DEP_VERS=dep-windows-amd64.exe
