@@ -1,7 +1,7 @@
 # pathutil
 
 [![Release](https://img.shields.io/github/release/JaSei/pathutil-go.svg?style=flat-square)](https://github.com/JaSei/pathutil-go/releases/latest)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Travis](https://img.shields.io/travis/JaSei/pathutil-go.svg?style=flat-square)](https://travis-ci.org/JaSei/pathutil-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/JaSei/pathutil-go?style=flat-square)](https://goreportcard.com/report/github.com/JaSei/pathutil-go)
 [![GoDoc](https://godoc.org/github.com/JaSei/pathutil-go?status.svg&style=flat-square)](http://godoc.org/github.com/JaSei/pathutil-go)
@@ -47,9 +47,11 @@ functions which isn't in core libraries (like `Copy` for example)
 
 ### SEE ALSO
 
-* [Path::Tiny](https://metacpan.org/pod/Path::Tiny) for Perl * [better
-files](https://github.com/pathikrit/better-files) for Scala *
-[pathlib](https://docs.python.org/3/library/pathlib.html) for python
+* [Path::Tiny](https://metacpan.org/pod/Path::Tiny) for Perl
+
+* [better files](https://github.com/pathikrit/better-files) for Scala
+
+* [pathlib](https://docs.python.org/3/library/pathlib.html) for python
 
 ## Usage
 
