@@ -116,7 +116,7 @@ type Path interface {
 	MakePath() error
 	MakePathMode(os.FileMode) error
 
-	OpenReader() (io.ReadCloser, error)
+	OpenReader() (ReadSeekCloser, error)
 	OpenWriter() (*os.File, error)
 	OpenWriterAppend() (*os.File, error)
 
@@ -320,9 +320,9 @@ default given mode
 #### func (PathImpl) OpenReader
 
 ```go
-func (path PathImpl) OpenReader() (io.ReadCloser, error)
+func (path PathImpl) OpenReader() (ReadSeekCloser, error)
 ```
-OpenReader retun io.ReaderCloser
+OpenReader retun ReadSeekCloser interface
 
 for example:
 
@@ -449,6 +449,17 @@ like (slash as separator) for os specific string use Canonpath method
 ```go
 func (path PathImpl) Visit(visitFunc VisitFunc, visitOpt VisitOpt)
 ```
+
+#### type ReadSeekCloser
+
+```go
+type ReadSeekCloser interface {
+	io.Reader
+	io.Seeker
+	io.Closer
+}
+```
+
 
 #### type TempOpt
 
