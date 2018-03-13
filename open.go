@@ -9,7 +9,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-// OpenReader retun io.ReaderCloser
+type ReadSeekCloser interface {
+	io.Reader
+	io.Seeker
+	io.Closer
+}
+
+// OpenReader retun ReadSeekCloser interface
 //
 // for example:
 //	path, _ := New("/bla/bla")
@@ -19,7 +25,7 @@ import (
 //	}
 //	defer r.Close()
 //
-func (path PathImpl) OpenReader() (io.ReadCloser, error) {
+func (path PathImpl) OpenReader() (ReadSeekCloser, error) {
 	file, err := os.Open(path.Canonpath())
 	if err != nil {
 		return nil, errors.Wrapf(err, "OpenReader on path %s fail (%+v)", path, path)
