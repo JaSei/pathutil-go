@@ -53,6 +53,46 @@ functions which isn't in core libraries (like `Copy` for example)
 
 * [pathlib](https://docs.python.org/3/library/pathlib.html) for python
 
+BREAKING CHANGE 0.2.0 -> 1.0.0
+
+`NewTempFile` or `NewTempDir` don't need TempOpt struct
+
+    //0.2.0 default
+    pathutil.NewTempFile(pathutil.TempOpt{})
+    //0.2.0 custom
+    pathutil.NewTempFile(pathutil.TempOpt{Dir: "/test", Prefix: "pre"})
+
+    //1.0.0 default
+    pathutil.NewTempFile()
+    //1.0.0 custom
+    pathutil.NewTempFile(Dir("/test"), Prefix("pre"))
+
+`New` method parameter allowed `string` type or type implements `fmt.Stringer`
+### interface
+
+    //0.2.0
+    pathutil.New(otherPath.String(), "test")
+
+    //1.0.0
+    pathutil.New(otherPath, "test")
+
+This shouldn't be breaking change, but if you use in some code variadic
+parameter as input of `pathutil.New`, then can be problem
+
+    //0.2.0
+    func(p ...string) {
+    	pathutil.New(p...)
+    }("a", "b")
+
+    //1.0.0
+    func(p ...string) {
+    	n := make([]interface{}, len(p))
+    	for i, v := range p {
+    		n[i] = v
+    	}
+    	pathutil.New(n...)
+    }("a", "b")
+
 ## Usage
 
 #### type CryptoHash
@@ -150,7 +190,7 @@ Cwd create new path from current working directory
 #### func  New
 
 ```go
-func New(path ...string) (Path, error)
+func New(path ...interface{}) (Path, error)
 ```
 New construct Path
 
@@ -158,12 +198,12 @@ for example
 
     path := New("/home/test", ".vimrc")
 
-if you can use `Path` in `New`, you must use `.String()` method
+input can be `string` or type implements `fmt.Stringer` interface
 
 #### func  NewTempDir
 
 ```go
-func NewTempDir(options TempOpt) (Path, error)
+func NewTempDir(options ...TempOpt) (Path, error)
 ```
 NewTempDir create temp directory
 
@@ -175,7 +215,7 @@ for cleanup use `defer`
 #### func  NewTempFile
 
 ```go
-func NewTempFile(options TempOpt) (p Path, err error)
+func NewTempFile(options ...TempOpt) (p Path, err error)
 ```
 
 #### type PathImpl
@@ -464,15 +504,25 @@ type ReadSeekCloser interface {
 #### type TempOpt
 
 ```go
-type TempOpt struct {
-	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
-	Dir string
-	// name beginning with prefix
-	Prefix string
-}
+type TempOpt func(*tempOpt)
 ```
 
-TempOpt is struct for configure new tempdir or tempfile
+TempOpt is func for configure tempdir or tempfile
+
+#### func  Dir
+
+```go
+func Dir(dir string) TempOpt
+```
+directory where is temp file/dir create, empty string `""` (default) means
+TEMPDIR (`os.TempDir`)
+
+#### func  Prefix
+
+```go
+func Prefix(prefix string) TempOpt
+```
+name beginning with prefix
 
 #### type VisitFunc
 

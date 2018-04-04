@@ -1,6 +1,6 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-GO18?=$(shell go version | grep -E "go1\.[89]")
+GO18?=$(shell go version | grep -P "go1\.(?:[89]|\d{2,})")
 DEP?=$$(which dep)
 export GO15VENDOREXPERIMENT=1
 

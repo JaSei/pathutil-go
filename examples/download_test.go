@@ -19,7 +19,7 @@ func TestDownload(t *testing.T) {
 		assert.NoError(t, response.Body.Close())
 	}()
 
-	temp, err := pathutil.NewTempFile(pathutil.TempOpt{})
+	temp, err := pathutil.NewTempFile()
 
 	defer func() {
 		assert.NoError(t, temp.Remove())

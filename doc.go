@@ -41,5 +41,43 @@ SEE ALSO
 
 * [pathlib](https://docs.python.org/3/library/pathlib.html) for python
 
+BREAKING CHANGE 0.2.0 -> 1.0.0
+
+`NewTempFile` or `NewTempDir` don't need TempOpt struct
+
+	//0.2.0 default
+	pathutil.NewTempFile(pathutil.TempOpt{})
+	//0.2.0 custom
+	pathutil.NewTempFile(pathutil.TempOpt{Dir: "/test", Prefix: "pre"})
+
+	//1.0.0 default
+	pathutil.NewTempFile()
+	//1.0.0 custom
+	pathutil.NewTempFile(Dir("/test"), Prefix("pre"))
+
+`New` method parameter allowed `string` type or type implements `fmt.Stringer` interface
+
+	//0.2.0
+	pathutil.New(otherPath.String(), "test")
+
+	//1.0.0
+	pathutil.New(otherPath, "test")
+
+This shouldn't be breaking change, but if you use in some code variadic parameter as input of `pathutil.New`, then can be problem
+
+	//0.2.0
+	func(p ...string) {
+		pathutil.New(p...)
+	}("a", "b")
+
+	//1.0.0
+	func(p ...string) {
+		n := make([]interface{}, len(p))
+		for i, v := range p {
+			n[i] = v
+		}
+		pathutil.New(n...)
+	}("a", "b")
+
 */
 package pathutil

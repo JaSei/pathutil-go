@@ -7,7 +7,7 @@ import (
 )
 
 func TestMakePath(t *testing.T) {
-	tempdir, err := NewTempDir(TempOpt{})
+	tempdir, err := NewTempDir()
 	assert.NoError(t, err)
 
 	defer func() {

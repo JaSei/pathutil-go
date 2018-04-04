@@ -7,7 +7,7 @@ import (
 )
 
 func TestChdir(t *testing.T) {
-	tempdir, err := NewTempDir(TempOpt{})
+	tempdir, err := NewTempDir()
 	assert.NoError(t, err)
 
 	cwd, err := Cwd()
