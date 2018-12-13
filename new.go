@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
 )
 
@@ -50,7 +51,6 @@ type TempOpt struct {
 //		temp, err := NewTempFile(TempFileOpt{})
 //		temp.Remove()
 //
-
 func NewTempFile(options TempOpt) (p Path, err error) {
 	file, err := ioutil.TempFile(options.Dir, options.Prefix)
 	if err != nil {
@@ -80,7 +80,7 @@ func NewTempDir(options TempOpt) (Path, error) {
 	return New(dir)
 }
 
-// Cwd create new path from current working directory
+// Cwd create new Path from current working directory
 func Cwd() (Path, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -88,4 +88,15 @@ func Cwd() (Path, error) {
 	}
 
 	return New(cwd)
+}
+
+// Home create new Path from home directory
+// (internally use https://github.com/mitchellh/go-homedir library)
+func Home() (Path, error) {
+	home, err := homedir.Dir()
+	if err != nil {
+		return nil, errors.Wrap(err, "homedir.Dir fail")
+	}
+
+	return New(home)
 }

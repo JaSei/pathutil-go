@@ -147,6 +147,12 @@ func Cwd() (Path, error)
 ```
 Cwd create new path from current working directory
 
+#### func  Home
+
+```go
+func Home() (Path, error)
+```
+
 #### func  New
 
 ```go

@@ -45,3 +45,11 @@ func TestTempFile(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Exactly(t, true, temp.Exists(), "new temp file exists")
 }
+
+// Cwd is tested in chdir_test.go
+
+func TestHome(t *testing.T) {
+	home, err := Home()
+	assert.NotNil(t, home)
+	assert.NoError(t, err)
+}
