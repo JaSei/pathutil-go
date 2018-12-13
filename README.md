@@ -143,9 +143,27 @@ type Path interface {
 #### func  Cwd
 
 ```go
-func Cwd() (Path, error)
+func Cwd(subpath ...string) (Path, error)
 ```
-Cwd create new path from current working directory
+Cwd create new Path from current working directory optional is possible to set
+subpath
+
+for example
+
+    gitConfigPath, err := pathutil.Cwd('.git/config')
+
+#### func  Home
+
+```go
+func Home(subpath ...string) (Path, error)
+```
+Home create new Path from home directory optional is possible to set subpath
+
+for example
+
+    initPath, err := pathutil.Home('.config/nvim/init.vim')
+
+(internally use https://github.com/mitchellh/go-homedir library)
 
 #### func  New
 
@@ -177,6 +195,17 @@ for cleanup use `defer`
 ```go
 func NewTempFile(options TempOpt) (p Path, err error)
 ```
+NewTempFile create temp file
+
+for cleanup use defer
+
+    temp, err := NewTempFile(TempOpt{})
+    defer temp.Remove()
+
+if you need only temp file name, you must delete file
+
+    temp, err := NewTempFile(TempFileOpt{})
+    temp.Remove()
 
 #### type PathImpl
 

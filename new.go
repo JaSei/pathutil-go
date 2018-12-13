@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
 )
 
@@ -50,7 +51,6 @@ type TempOpt struct {
 //		temp, err := NewTempFile(TempFileOpt{})
 //		temp.Remove()
 //
-
 func NewTempFile(options TempOpt) (p Path, err error) {
 	file, err := ioutil.TempFile(options.Dir, options.Prefix)
 	if err != nil {
@@ -80,12 +80,43 @@ func NewTempDir(options TempOpt) (Path, error) {
 	return New(dir)
 }
 
-// Cwd create new path from current working directory
-func Cwd() (Path, error) {
+// Cwd create new Path from current working directory
+// optional is possible to set subpath
+//
+// for example
+//		gitConfigPath, err := pathutil.Cwd('.git/config')
+//
+func Cwd(subpath ...string) (Path, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, errors.Wrap(err, "Getwd fail")
 	}
 
-	return New(cwd)
+	return New(join(cwd, subpath)...)
+}
+
+// Home create new Path from home directory
+// optional is possible to set subpath
+//
+// for example
+//		initPath, err := pathutil.Home('.config/nvim/init.vim')
+//
+// (internally use https://github.com/mitchellh/go-homedir library)
+func Home(subpath ...string) (Path, error) {
+	home, err := homedir.Dir()
+	if err != nil {
+		return nil, errors.Wrap(err, "homedir.Dir fail")
+	}
+
+	return New(join(home, subpath)...)
+}
+
+func join(a string, b []string) []string {
+	p := make([]string, len(b)+1)
+	p[0] = a
+	for i, c := range b {
+		p[i+1] = c
+	}
+
+	return p
 }
