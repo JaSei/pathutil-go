@@ -46,10 +46,28 @@ func TestTempFile(t *testing.T) {
 	assert.Exactly(t, true, temp.Exists(), "new temp file exists")
 }
 
-// Cwd is tested in chdir_test.go
+func TestCwd(t *testing.T) {
+	cwd, err := Cwd()
+	assert.NotNil(t, cwd)
+	assert.NoError(t, err)
+
+	cwdSub, err := Cwd(".git", "config")
+	assert.NotNil(t, cwdSub)
+	assert.NoError(t, err)
+
+	expectedPath, _ := New(cwd.String(), ".git/config")
+	assert.Equal(t, cwdSub, expectedPath)
+}
 
 func TestHome(t *testing.T) {
 	home, err := Home()
 	assert.NotNil(t, home)
 	assert.NoError(t, err)
+
+	homeSub, err := Home(".config", "nvim", "init.vim")
+	assert.NotNil(t, homeSub)
+	assert.NoError(t, err)
+
+	expectedPath, _ := New(home.String(), ".config/nvim/init.vim")
+	assert.Equal(t, homeSub, expectedPath)
 }
