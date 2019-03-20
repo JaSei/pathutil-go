@@ -1,6 +1,6 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-GO18?=$(shell go version | grep -E "go1\.[89]")
+GONEWER?=$(shell go version | grep -E "go1\.1[01]")
 DEP?=$$(which dep)
 export GO15VENDOREXPERIMENT=1
 
@@ -20,8 +20,8 @@ setup: ## Install all the build and lint dependencies
 		chmod +x $$GOPATH/bin/dep;\
 	fi
 	dep ensure
-ifeq ($(GO18),) 
-	@echo no install metalinter, because metalinter need go1.8+
+ifeq ($(GONEWER),) 
+	@echo no install metalinter, we need go1.10+
 else
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install
@@ -40,7 +40,7 @@ fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
 
 lint: ## Run all the linters
-ifeq ($(GO18),) 
+ifeq ($(GONEWER),) 
 	@echo no run metalinter, because metalinter need go1.8+
 else
 	#https://github.com/golang/go/issues/19490
