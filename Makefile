@@ -50,7 +50,7 @@ fmt: ## gofmt and goimports all go files
 lint: ## Run all the linters
 	golangci-lint run
 
-ci: test lint  ## Run all the tests and code checks
+ci: test ## Run all the tests but no linters - use https://golangci.com integration instead
 
 build: ## Build the app
 	go build
