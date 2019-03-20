@@ -13,11 +13,11 @@ ifeq ($(OS),Windows_NT)
 else ifeq ($(OS), Darwin)
 	DEP_VERS=dep-darwin-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-darwin-amd64.tar.gz
-	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --strip 1 "**/golangci-lint"
+	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 else
 	DEP_VERS=dep-linux-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-linux-amd64.tar.gz
-	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --strip 1 "**/golangci-lint"
+	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 endif
 
 setup: ## Install all the build and lint dependencies
