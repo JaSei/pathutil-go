@@ -1,31 +1,39 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-GO18?=$(shell go version | grep -E "go1\.[89]")
+GONEWER?=$(shell go version | grep -E "go1\.1[01]")
 DEP?=$$(which dep)
+LINTER?=$$(which golangci-lint)
+LINTER_VERSION=1.15.0
 export GO15VENDOREXPERIMENT=1
 
 ifeq ($(OS),Windows_NT)
 	DEP_VERS=dep-windows-amd64.exe
+	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-windows-amd64.zip
+	LINTER_UNPACK= >| app.zip; unzip -j app.zip -d $$GOPATH/bin; rm app.zip
 else ifeq ($(OS), Darwin)
 	DEP_VERS=dep-darwin-amd64
+	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-darwin-amd64.tar.gz
+	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 else
 	DEP_VERS=dep-linux-amd64
+	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-linux-amd64.tar.gz
+	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 endif
 
 setup: ## Install all the build and lint dependencies
 	go get -u golang.org/x/tools/cmd/cover
 	go get -u github.com/robertkrimen/godocdown/godocdown
+
 	@if [ "$(DEP)" = "" ]; then\
-		curl -L https://github.com/golang/dep/releases/download/v0.4.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
+		curl -L https://github.com/golang/dep/releases/download/v0.5.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
 		chmod +x $$GOPATH/bin/dep;\
 	fi
 	dep ensure
-ifeq ($(GO18),) 
-	@echo no install metalinter, because metalinter need go1.8+
-else
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install
-endif
+
+	@if [ "$(LINTER)" = "" ]; then\
+		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\
+		chmod +x $$GOPATH/bin/golangci-lint;\
+	fi
 
 generate: ## Generate README.md
 	godocdown >| README.md
@@ -40,30 +48,9 @@ fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
 
 lint: ## Run all the linters
-ifeq ($(GO18),) 
-	@echo no run metalinter, because metalinter need go1.8+
-else
-	#https://github.com/golang/go/issues/19490
-	#--enable=vetshadow \
+	golangci-lint run
 
-	gometalinter --vendor --disable-all \
-		--enable=deadcode \
-		--enable=ineffassign \
-		--enable=gosimple \
-		--enable=staticcheck \
-		--enable=gofmt \
-		--enable=goimports \
-		--enable=dupl \
-		--enable=misspell \
-		--enable=errcheck \
-		--enable=vet \
-		--deadline=10m \
-		--enable=vetshadow \
-		./...
-
-endif
-
-ci: test lint  ## Run all the tests and code checks
+ci: test ## Run all the tests but no linters - use https://golangci.com integration instead
 
 build: ## Build the app
 	go build

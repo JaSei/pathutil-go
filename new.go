@@ -38,6 +38,7 @@ type TempOpt struct {
 	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
 	Dir string
 	// name beginning with prefix
+	// if prefix includes a "*", the random string replaces the last "*".
 	Prefix string
 }
 
@@ -52,7 +53,7 @@ type TempOpt struct {
 //		temp.Remove()
 //
 func NewTempFile(options TempOpt) (p Path, err error) {
-	file, err := ioutil.TempFile(options.Dir, options.Prefix)
+	file, err := tempFile(options.Dir, options.Prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", options)
 	}
