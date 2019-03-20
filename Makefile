@@ -11,11 +11,11 @@ ifeq ($(OS),Windows_NT)
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-windows-amd64.zip
 	LINTER_UNPACK= >| app.zip; unzip -j app.zip -d $$GOPATH/bin; rm app.zip
 else ifeq ($(OS), Darwin)
-	DEP_VERS=darwin-amd64
+	DEP_VERS=dep-darwin-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-darwin-amd64.tar.gz
 	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --strip 1 "**/golangci-lint"
 else
-	DEP_VERS=linux-amd64
+	DEP_VERS=dep-linux-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-linux-amd64.tar.gz
 	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --strip 1 "**/golangci-lint"
 endif
@@ -25,7 +25,7 @@ setup: ## Install all the build and lint dependencies
 	go get -u github.com/robertkrimen/godocdown/godocdown
 
 	@if [ "$(DEP)" = "" ]; then\
-		curl -L https://github.com/golang/dep/releases/download/v0.4.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
+		curl -L https://github.com/golang/dep/releases/download/v0.5.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
 		chmod +x $$GOPATH/bin/dep;\
 	fi
 	dep ensure
