@@ -53,7 +53,7 @@ type TempOpt struct {
 //		temp.Remove()
 //
 func NewTempFile(options TempOpt) (p Path, err error) {
-	file, err := ioutil.TempFile(options.Dir, options.Prefix)
+	file, err := tempFile(options.Dir, options.Prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", options)
 	}
