@@ -55,6 +55,7 @@ func TestTempFileWithPattern(t *testing.T) {
 	assert.NotNil(t, temp)
 	assert.Nil(t, err)
 	assert.Exactly(t, true, temp.Exists(), "new temp file exists")
+	assert.Regexp(t, "bla.+\\.dat$", temp.String())
 }
 
 func TestCwd(t *testing.T) {
