@@ -38,6 +38,7 @@ type TempOpt struct {
 	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
 	Dir string
 	// name beginning with prefix
+	// if prefix includes a "*", the random string replaces the last "*".
 	Prefix string
 }
 

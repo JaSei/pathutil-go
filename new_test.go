@@ -46,6 +46,17 @@ func TestTempFile(t *testing.T) {
 	assert.Exactly(t, true, temp.Exists(), "new temp file exists")
 }
 
+func TestTempFileWithPattern(t *testing.T) {
+	temp, err := NewTempFile(TempOpt{Prefix: "bla*.dat"})
+	defer func() {
+		assert.NoError(t, temp.Remove())
+	}()
+
+	assert.NotNil(t, temp)
+	assert.Nil(t, err)
+	assert.Exactly(t, true, temp.Exists(), "new temp file exists")
+}
+
 func TestCwd(t *testing.T) {
 	cwd, err := Cwd()
 	assert.NotNil(t, cwd)
