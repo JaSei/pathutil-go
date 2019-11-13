@@ -89,7 +89,7 @@ func NewTempFile(options ...TempOpt) (p Path, err error) {
 		o(&opt)
 	}
 
-	file, err := ioutil.TempFile(opt.dir, opt.prefix)
+	file, err := tempFile(opt.dir, opt.prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", opt)
 	}
