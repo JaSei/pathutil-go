@@ -16,7 +16,7 @@ import (
 //
 // for example print of Md5 hexstring
 //		hash, err := path.CryptoMd5()
-//		fmt.Println(hash.String())
+//		fmt.Println(hash)
 func (path PathImpl) CryptoMd5() (hashutil.Md5, error) {
 	c, err := path.crypto(md5.New())
 	if err != nil {
@@ -31,7 +31,7 @@ func (path PathImpl) CryptoMd5() (hashutil.Md5, error) {
 //
 // for example print of Sha1 hexstring
 //		hash, err := path.CryptoSha1()
-//		fmt.Println(hash.String())
+//		fmt.Println(hash)
 func (path PathImpl) CryptoSha1() (hashutil.Sha1, error) {
 	c, err := path.crypto(sha1.New())
 	if err != nil {
@@ -46,7 +46,7 @@ func (path PathImpl) CryptoSha1() (hashutil.Sha1, error) {
 //
 // for example print of Sha256 hexstring
 //		hash, err := path.CryptoSha256()
-//		fmt.Println(hash.String())
+//		fmt.Println(hash)
 func (path PathImpl) CryptoSha256() (hashutil.Sha256, error) {
 	c, err := path.crypto(sha256.New())
 	if err != nil {
@@ -61,7 +61,7 @@ func (path PathImpl) CryptoSha256() (hashutil.Sha256, error) {
 //
 // for example print of Sha284 hexstring
 //		hash, err := path.CryptoSha284()
-//		fmt.Println(hash.String())
+//		fmt.Println(hash)
 func (path PathImpl) CryptoSha384() (hashutil.Sha384, error) {
 	c, err := path.crypto(sha512.New384())
 	if err != nil {
@@ -76,7 +76,7 @@ func (path PathImpl) CryptoSha384() (hashutil.Sha384, error) {
 //
 // for example print of Sha512 hexstring
 //		hash, err := path.CryptoSha512()
-//		fmt.Println(hash.String())
+//		fmt.Println(hash)
 func (path PathImpl) CryptoSha512() (hashutil.Sha512, error) {
 	c, err := path.crypto(sha512.New())
 	if err != nil {

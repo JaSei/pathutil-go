@@ -14,12 +14,12 @@ type FileSource struct {
 }
 
 type FileInfo struct {
-	FileId  string       `json:"file_id"`
+	FileID  string       `json:"file_id"`
 	Sources []FileSource `json:"sources"`
 }
 
 var expected = FileInfo{
-	FileId: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+	FileID: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
 	Sources: []FileSource{
 		{Path: "c:\\tmp\\empty_file", Size: 0},
 		{Path: "/tmp/empty_file", Size: 0},
@@ -37,14 +37,14 @@ func TestLoadJsonViaReader(t *testing.T) {
 	}()
 	assert.NotNil(t, reader)
 
-	decodedJson := new(FileInfo)
+	decodedJSON := new(FileInfo)
 
-	err = json.NewDecoder(reader).Decode(decodedJson)
+	err = json.NewDecoder(reader).Decode(decodedJSON)
 	if !assert.Nil(t, err) {
 		t.Log(err)
 	}
 
-	assert.Equal(t, &expected, decodedJson)
+	assert.Equal(t, &expected, decodedJSON)
 }
 
 func TestLoadJsonViaSlurp(t *testing.T) {
@@ -54,9 +54,9 @@ func TestLoadJsonViaSlurp(t *testing.T) {
 	jsonBytes, err := path.SlurpBytes()
 	assert.Nil(t, err)
 
-	decodedJson := new(FileInfo)
-	assert.NoError(t, json.Unmarshal(jsonBytes, decodedJson))
+	decodedJSON := new(FileInfo)
+	assert.NoError(t, json.Unmarshal(jsonBytes, decodedJSON))
 
-	assert.Equal(t, &expected, decodedJson)
+	assert.Equal(t, &expected, decodedJSON)
 
 }

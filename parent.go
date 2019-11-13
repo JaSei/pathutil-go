@@ -7,6 +7,6 @@ package pathutil
 // original directory or file
 func (path PathImpl) Parent() Path {
 	// path.String() can't be empty
-	parent, _ := New(path.String(), "..")
+	parent, _ := New(path, "..")
 	return parent
 }

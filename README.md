@@ -317,7 +317,7 @@ CryptoMd5 method access hash funcionality like Path::Tiny Digest return
 for example print of Md5 hexstring
 
     hash, err := path.CryptoMd5()
-    fmt.Println(hash.String())
+    fmt.Println(hash)
 
 #### func (PathImpl) CryptoSha1
 
@@ -330,7 +330,7 @@ CryptoSha1 method access hash funcionality like Path::Tiny Digest return
 for example print of Sha1 hexstring
 
     hash, err := path.CryptoSha1()
-    fmt.Println(hash.String())
+    fmt.Println(hash)
 
 #### func (PathImpl) CryptoSha256
 
@@ -343,7 +343,7 @@ CryptoSha256 method access hash funcionality like Path::Tiny Digest return
 for example print of Sha256 hexstring
 
     hash, err := path.CryptoSha256()
-    fmt.Println(hash.String())
+    fmt.Println(hash)
 
 #### func (PathImpl) CryptoSha384
 
@@ -356,7 +356,7 @@ CryptoSha384 method access hash funcionality like Path::Tiny Digest return
 for example print of Sha284 hexstring
 
     hash, err := path.CryptoSha284()
-    fmt.Println(hash.String())
+    fmt.Println(hash)
 
 #### func (PathImpl) CryptoSha512
 
@@ -369,7 +369,7 @@ CryptoSha512 method access hash funcionality like Path::Tiny Digest return
 for example print of Sha512 hexstring
 
     hash, err := path.CryptoSha512()
-    fmt.Println(hash.String())
+    fmt.Println(hash)
 
 #### func (PathImpl) Exists
 
