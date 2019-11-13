@@ -7,7 +7,7 @@ import (
 )
 
 func TestRemove(t *testing.T) {
-	temp, err := NewTempFile(TempOpt{})
+	temp, err := NewTempFile()
 	assert.NoError(t, err)
 	assert.True(t, temp.Exists())
 	assert.NoError(t, temp.Remove())

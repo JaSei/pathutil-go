@@ -9,7 +9,7 @@ import (
 
 func TestCopyFileDstFileExists(t *testing.T) {
 	src, _ := New("copy_test.go")
-	dst, err := NewTempFile(TempOpt{})
+	dst, err := NewTempFile()
 	assert.Nil(t, err)
 	defer func() {
 		assert.NoError(t, dst.Remove())

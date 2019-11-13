@@ -1,6 +1,5 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-GONEWER?=$(shell go version | grep -E "go1\.1[01]")
 DEP?=$$(which dep)
 LINTER?=$$(which golangci-lint)
 LINTER_VERSION=1.15.0

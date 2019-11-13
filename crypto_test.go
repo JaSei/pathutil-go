@@ -8,7 +8,7 @@ import (
 )
 
 func TestPathCrypto(t *testing.T) {
-	path, err := NewTempFile(TempOpt{})
+	path, err := NewTempFile()
 	assert.Nil(t, err)
 	defer func() {
 		assert.NoError(t, path.Remove())

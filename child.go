@@ -5,9 +5,13 @@ import (
 )
 
 func (path PathImpl) Child(childName ...string) (Path, error) {
-	pathChunks := append([]string{path.String()}, childName...)
+	p := make([]interface{}, len(childName)+1)
+	p[0] = path
+	for i, c := range childName {
+		p[i+1] = c
+	}
 
-	return New(pathChunks...)
+	return New(p...)
 }
 
 func (path PathImpl) Children() ([]Path, error) {
