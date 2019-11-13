@@ -53,13 +53,13 @@ functions which isn't in core libraries (like `Copy` for example)
 
 * [pathlib](https://docs.python.org/3/library/pathlib.html) for python
 
-BREAKING CHANGE 0.2.0 -> 1.0.0
+BREAKING CHANGE 0.3.1 -> 1.0.0
 
-`NewTempFile` or `NewTempDir` don't need TempOpt struct
+1. `NewTempFile` or `NewTempDir` don't need TempOpt struct
 
-    //0.2.0 default
+    //0.3.1 default
     pathutil.NewTempFile(pathutil.TempOpt{})
-    //0.2.0 custom
+    //0.3.1 custom
     pathutil.NewTempFile(pathutil.TempOpt{Dir: "/test", Prefix: "pre"})
 
     //1.0.0 default
@@ -67,10 +67,10 @@ BREAKING CHANGE 0.2.0 -> 1.0.0
     //1.0.0 custom
     pathutil.NewTempFile(Dir("/test"), Prefix("pre"))
 
-`New` method parameter allowed `string` type or type implements `fmt.Stringer`
-### interface
+2. `New` method parameter allowed `string` type or type implements
+`fmt.Stringer` interface
 
-    //0.2.0
+    //0.3.1
     pathutil.New(otherPath.String(), "test")
 
     //1.0.0
@@ -79,7 +79,7 @@ BREAKING CHANGE 0.2.0 -> 1.0.0
 This shouldn't be breaking change, but if you use in some code variadic
 parameter as input of `pathutil.New`, then can be problem
 
-    //0.2.0
+    //0.3.1
     func(p ...string) {
     	pathutil.New(p...)
     }("a", "b")
@@ -92,6 +92,34 @@ parameter as input of `pathutil.New`, then can be problem
     	}
     	pathutil.New(n...)
     }("a", "b")
+
+3. There is new (more handfull) crypto API
+
+    //0.3.1
+    import (
+    	"crypto"
+    	"github.com/JaSei/pathutil-go"
+    )
+    ...
+
+    hash, err := path.Crypto(crypto.SHA256)
+    if err == nil {
+    	fmt.Printf("%s\t%s\n", hash.HexSum(), path.String())
+    }
+
+    //1.0.0
+    import (
+    	"github.com/JaSei/pathutil-go"
+    )
+    ...
+
+    hash, err := path.CryptoSha256()
+    if err == nil {
+    	fmt.Printf("%s\t%s\n", hash, path.String())
+    }
+
+This new crypto API return [hashutil](github.com/JaSei/hashutil-go) struct which
+is more handfull for compare, transformation and next hash manipulation.
 
 ## Usage
 
