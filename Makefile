@@ -28,7 +28,7 @@ setup: ## Install all the build and lint dependencies
 		curl -L https://github.com/golang/dep/releases/download/v0.5.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
 		chmod +x $$GOPATH/bin/dep;\
 	fi
-	dep ensure
+	dep ensure -v
 
 	@if [ "$(LINTER)" = "" ]; then\
 		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\
