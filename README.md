@@ -55,29 +55,6 @@ functions which isn't in core libraries (like `Copy` for example)
 
 ## Usage
 
-#### type CryptoHash
-
-```go
-type CryptoHash struct {
-	hash.Hash
-}
-```
-
-
-#### func (*CryptoHash) BinSum
-
-```go
-func (hash *CryptoHash) BinSum() []byte
-```
-BinSum method is like hash.Sum(nil)
-
-#### func (*CryptoHash) HexSum
-
-```go
-func (hash *CryptoHash) HexSum() string
-```
-HexSum method retun hexstring representation of hash.Sum
-
 #### type LinesFunc
 
 ```go
@@ -111,7 +88,11 @@ type Path interface {
 
 	CopyFrom(io.Reader) (int64, error)
 
-	Crypto(crypto.Hash) (*CryptoHash, error)
+	CryptoMd5() (hashutil.Md5, error)
+	CryptoSha1() (hashutil.Sha1, error)
+	CryptoSha256() (hashutil.Sha256, error)
+	CryptoSha384() (hashutil.Sha384, error)
+	CryptoSha512() (hashutil.Sha512, error)
 
 	MakePath() error
 	MakePathMode(os.FileMode) error
@@ -275,11 +256,70 @@ func (path PathImpl) CopyFrom(reader io.Reader) (copyied int64, err error)
 ```
 CopyFrom copy stream from reader to path (file after copy close and sync)
 
-#### func (PathImpl) Crypto
+#### func (PathImpl) CryptoMd5
 
 ```go
-func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error)
+func (path PathImpl) CryptoMd5() (hashutil.Md5, error)
 ```
+CryptoMd5 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Md5](github.com/JaSei/hashutil-go) type
+
+for example print of Md5 hexstring
+
+    hash, err := path.CryptoMd5()
+    fmt.Println(hash.String())
+
+#### func (PathImpl) CryptoSha1
+
+```go
+func (path PathImpl) CryptoSha1() (hashutil.Sha1, error)
+```
+CryptoSha1 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha1](github.com/JaSei/hashutil-go) type
+
+for example print of Sha1 hexstring
+
+    hash, err := path.CryptoSha1()
+    fmt.Println(hash.String())
+
+#### func (PathImpl) CryptoSha256
+
+```go
+func (path PathImpl) CryptoSha256() (hashutil.Sha256, error)
+```
+CryptoSha256 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha256](github.com/JaSei/hashutil-go) type
+
+for example print of Sha256 hexstring
+
+    hash, err := path.CryptoSha256()
+    fmt.Println(hash.String())
+
+#### func (PathImpl) CryptoSha384
+
+```go
+func (path PathImpl) CryptoSha384() (hashutil.Sha384, error)
+```
+CryptoSha384 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha384](github.com/JaSei/hashutil-go) type
+
+for example print of Sha284 hexstring
+
+    hash, err := path.CryptoSha284()
+    fmt.Println(hash.String())
+
+#### func (PathImpl) CryptoSha512
+
+```go
+func (path PathImpl) CryptoSha512() (hashutil.Sha512, error)
+```
+CryptoSha512 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha512](github.com/JaSei/hashutil-go) type
+
+for example print of Sha512 hexstring
+
+    hash, err := path.CryptoSha512()
+    fmt.Println(hash.String())
 
 #### func (PathImpl) Exists
 

@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/JaSei/hashutil-go"
+  packages = ["."]
+  revision = "68c1143bd752ad46ad7ec4fcb5b4b46d111b9927"
+  version = "2.0.0"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -34,6 +40,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e1bad7702ae86fa3c5e9348f2bea7b41bde7c618fc895b9c4b9a88c89b6cce29"
+  inputs-digest = "c840c37d3244f4c44699b96ac39cbfa8d0a87bdf3b200ac9d54b3012fe5e3f0b"
   solver-name = "gps-cdcl"
   solver-version = 1

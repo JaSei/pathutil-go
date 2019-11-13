@@ -1,20 +1,92 @@
 package pathutil
 
 import (
-	"crypto"
-	"fmt"
+	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
 	"hash"
 	"io"
+
+	"github.com/JaSei/hashutil-go"
 )
 
-// Crypto method access hash funcionality like Path::Tiny Digest
-// look to https://godoc.org/crypto#Hash for list possible crypto hash functions
+// CryptoMd5 method access hash funcionality like Path::Tiny Digest
+// return [hashutil.Md5](github.com/JaSei/hashutil-go) type
+//
+// for example print of Md5 hexstring
+//		hash, err := path.CryptoMd5()
+//		fmt.Println(hash.String())
+func (path PathImpl) CryptoMd5() (hashutil.Md5, error) {
+	c, err := path.crypto(md5.New())
+	if err != nil {
+		return hashutil.Md5{}, nil
+	}
+
+	return hashutil.HashToMd5(c)
+}
+
+// CryptoSha1 method access hash funcionality like Path::Tiny Digest
+// return [hashutil.Sha1](github.com/JaSei/hashutil-go) type
+//
+// for example print of Sha1 hexstring
+//		hash, err := path.CryptoSha1()
+//		fmt.Println(hash.String())
+func (path PathImpl) CryptoSha1() (hashutil.Sha1, error) {
+	c, err := path.crypto(sha1.New())
+	if err != nil {
+		return hashutil.Sha1{}, nil
+	}
+
+	return hashutil.HashToSha1(c)
+}
+
+// CryptoSha256 method access hash funcionality like Path::Tiny Digest
+// return [hashutil.Sha256](github.com/JaSei/hashutil-go) type
 //
 // for example print of Sha256 hexstring
-//		hash, err := path.Crypto(crypto.SHA256)
-//		fmt.Println(hash.HexSum())
+//		hash, err := path.CryptoSha256()
+//		fmt.Println(hash.String())
+func (path PathImpl) CryptoSha256() (hashutil.Sha256, error) {
+	c, err := path.crypto(sha256.New())
+	if err != nil {
+		return hashutil.Sha256{}, nil
+	}
 
-func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error) {
+	return hashutil.HashToSha256(c)
+}
+
+// CryptoSha384 method access hash funcionality like Path::Tiny Digest
+// return [hashutil.Sha384](github.com/JaSei/hashutil-go) type
+//
+// for example print of Sha284 hexstring
+//		hash, err := path.CryptoSha284()
+//		fmt.Println(hash.String())
+func (path PathImpl) CryptoSha384() (hashutil.Sha384, error) {
+	c, err := path.crypto(sha512.New384())
+	if err != nil {
+		return hashutil.Sha384{}, nil
+	}
+
+	return hashutil.HashToSha384(c)
+}
+
+// CryptoSha512 method access hash funcionality like Path::Tiny Digest
+// return [hashutil.Sha512](github.com/JaSei/hashutil-go) type
+//
+// for example print of Sha512 hexstring
+//		hash, err := path.CryptoSha512()
+//		fmt.Println(hash.String())
+func (path PathImpl) CryptoSha512() (hashutil.Sha512, error) {
+	c, err := path.crypto(sha512.New())
+	if err != nil {
+		return hashutil.Sha512{}, nil
+	}
+
+	return hashutil.HashToSha512(c)
+}
+
+func (path PathImpl) crypto(h hash.Hash) (ret hash.Hash, err error) {
 	reader, err := path.OpenReader()
 	if err != nil {
 		return nil, err
@@ -25,30 +97,11 @@ func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error) {
 		}
 	}()
 
-	h := hash.New()
-
 	_, err = io.Copy(h, reader)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &CryptoHash{h}, nil
-}
-
-// CryptoHash struct is only abstract for hash.Hash interface
-// for possible use with methods
-
-type CryptoHash struct {
-	hash.Hash
-}
-
-// BinSum method is like hash.Sum(nil)
-func (hash *CryptoHash) BinSum() []byte {
-	return hash.Sum(nil)
-}
-
-// HexSum method retun hexstring representation of hash.Sum
-func (hash *CryptoHash) HexSum() string {
-	return fmt.Sprintf("%x", hash.Sum(nil))
+	return h, nil
 }

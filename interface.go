@@ -1,9 +1,10 @@
 package pathutil
 
 import (
-	"crypto"
 	"io"
 	"os"
+
+	"github.com/JaSei/hashutil-go"
 )
 
 type VisitFunc func(path Path)
@@ -37,7 +38,11 @@ type Path interface {
 
 	CopyFrom(io.Reader) (int64, error)
 
-	Crypto(crypto.Hash) (*CryptoHash, error)
+	CryptoMd5() (hashutil.Md5, error)
+	CryptoSha1() (hashutil.Sha1, error)
+	CryptoSha256() (hashutil.Sha256, error)
+	CryptoSha384() (hashutil.Sha384, error)
+	CryptoSha512() (hashutil.Sha512, error)
 
 	MakePath() error
 	MakePathMode(os.FileMode) error
