@@ -1,7 +1,6 @@
 package pathutil_test
 
 import (
-	"crypto"
 	"fmt"
 	"testing"
 
@@ -19,10 +18,10 @@ func TestVisitRecursiveAndHashAllFiles(t *testing.T) {
 				return
 			}
 
-			hash, err := path.Crypto(crypto.SHA256)
+			hash, err := path.CryptoSha256()
 
 			if err == nil {
-				fmt.Printf("%s\t%s\n", hash.HexSum(), path.String())
+				fmt.Printf("%s\t%s\n", hash, path)
 			} else {
 				fmt.Println(err)
 			}

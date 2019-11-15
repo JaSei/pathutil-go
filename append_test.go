@@ -7,7 +7,7 @@ import (
 )
 
 func TestAppend(t *testing.T) {
-	temp, err := NewTempFile(TempOpt{})
+	temp, err := NewTempFile()
 	assert.NoError(t, err)
 
 	assert.NoError(t, temp.Append("test\n"))

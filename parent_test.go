@@ -8,7 +8,7 @@ import (
 )
 
 func TestParent(t *testing.T) {
-	temp, err := NewTempDir(TempOpt{})
+	temp, err := NewTempDir()
 	assert.NoError(t, err)
 
 	tempDir, err := New(os.TempDir())

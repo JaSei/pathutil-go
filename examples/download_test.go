@@ -1,12 +1,15 @@
 package pathutil_test
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/JaSei/pathutil-go"
 	"github.com/stretchr/testify/assert"
 )
+
+const sizeOfExampleSite = 1256
 
 func TestDownload(t *testing.T) {
 	response, err := http.Get("http://example.com")
@@ -19,7 +22,7 @@ func TestDownload(t *testing.T) {
 		assert.NoError(t, response.Body.Close())
 	}()
 
-	temp, err := pathutil.NewTempFile(pathutil.TempOpt{})
+	temp, err := pathutil.NewTempFile()
 
 	defer func() {
 		assert.NoError(t, temp.Remove())
@@ -33,11 +36,11 @@ func TestDownload(t *testing.T) {
 		t.Log(err)
 	}
 
-	assert.Equal(t, int64(1270), copyied, "Copy 1270 bytes")
+	assert.Equal(t, int64(sizeOfExampleSite), copyied, fmt.Sprintf("Copy %d bytes", sizeOfExampleSite))
 
 	ctx, err := temp.Slurp()
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, 1270, len(ctx), "Size of http://example.com are 1270")
+	assert.Equal(t, sizeOfExampleSite, len(ctx), fmt.Sprintf("Size of http://example.com are %d", sizeOfExampleSite))
 }

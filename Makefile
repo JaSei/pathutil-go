@@ -1,6 +1,5 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-GONEWER?=$(shell go version | grep -E "go1\.1[01]")
 DEP?=$$(which dep)
 LINTER?=$$(which golangci-lint)
 LINTER_VERSION=1.15.0
@@ -28,7 +27,7 @@ setup: ## Install all the build and lint dependencies
 		curl -L https://github.com/golang/dep/releases/download/v0.5.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
 		chmod +x $$GOPATH/bin/dep;\
 	fi
-	dep ensure
+	dep ensure -v
 
 	@if [ "$(LINTER)" = "" ]; then\
 		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\

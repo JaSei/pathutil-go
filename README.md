@@ -53,30 +53,75 @@ functions which isn't in core libraries (like `Copy` for example)
 
 * [pathlib](https://docs.python.org/3/library/pathlib.html) for python
 
+BREAKING CHANGE 0.3.1 -> 1.0.0
+
+1. `NewTempFile` or `NewTempDir` don't need TempOpt struct
+
+    //0.3.1 default
+    pathutil.NewTempFile(pathutil.TempOpt{})
+    //0.3.1 custom
+    pathutil.NewTempFile(pathutil.TempOpt{Dir: "/test", Prefix: "pre"})
+
+    //1.0.0 default
+    pathutil.NewTempFile()
+    //1.0.0 custom
+    pathutil.NewTempFile(Dir("/test"), Prefix("pre"))
+
+2. `New` method parameter allowed `string` type or type implements
+`fmt.Stringer` interface
+
+    //0.3.1
+    pathutil.New(otherPath.String(), "test")
+
+    //1.0.0
+    pathutil.New(otherPath, "test")
+
+This shouldn't be breaking change, but if you use in some code variadic
+parameter as input of `pathutil.New`, then can be problem
+
+    //0.3.1
+    func(p ...string) {
+    	pathutil.New(p...)
+    }("a", "b")
+
+    //1.0.0
+    func(p ...string) {
+    	n := make([]interface{}, len(p))
+    	for i, v := range p {
+    		n[i] = v
+    	}
+    	pathutil.New(n...)
+    }("a", "b")
+
+3. There is new (more handfull) crypto API
+
+    //0.3.1
+    import (
+    	"crypto"
+    	"github.com/JaSei/pathutil-go"
+    )
+    ...
+
+    hash, err := path.Crypto(crypto.SHA256)
+    if err == nil {
+    	fmt.Printf("%s\t%s\n", hash.HexSum(), path.String())
+    }
+
+    //1.0.0
+    import (
+    	"github.com/JaSei/pathutil-go"
+    )
+    ...
+
+    hash, err := path.CryptoSha256()
+    if err == nil {
+    	fmt.Printf("%s\t%s\n", hash, path.String())
+    }
+
+This new crypto API return [hashutil](github.com/JaSei/hashutil-go) struct which
+is more handfull for compare, transformation and next hash manipulation.
+
 ## Usage
-
-#### type CryptoHash
-
-```go
-type CryptoHash struct {
-	hash.Hash
-}
-```
-
-
-#### func (*CryptoHash) BinSum
-
-```go
-func (hash *CryptoHash) BinSum() []byte
-```
-BinSum method is like hash.Sum(nil)
-
-#### func (*CryptoHash) HexSum
-
-```go
-func (hash *CryptoHash) HexSum() string
-```
-HexSum method retun hexstring representation of hash.Sum
 
 #### type LinesFunc
 
@@ -111,7 +156,11 @@ type Path interface {
 
 	CopyFrom(io.Reader) (int64, error)
 
-	Crypto(crypto.Hash) (*CryptoHash, error)
+	CryptoMd5() (hashutil.Md5, error)
+	CryptoSha1() (hashutil.Sha1, error)
+	CryptoSha256() (hashutil.Sha256, error)
+	CryptoSha384() (hashutil.Sha384, error)
+	CryptoSha512() (hashutil.Sha512, error)
 
 	MakePath() error
 	MakePathMode(os.FileMode) error
@@ -168,7 +217,7 @@ for example
 #### func  New
 
 ```go
-func New(path ...string) (Path, error)
+func New(path ...interface{}) (Path, error)
 ```
 New construct Path
 
@@ -176,24 +225,29 @@ for example
 
     path := New("/home/test", ".vimrc")
 
-if you can use `Path` in `New`, you must use `.String()` method
+input can be `string` or type implements `fmt.Stringer` interface
 
 #### func  NewTempDir
 
 ```go
-func NewTempDir(options TempOpt) (Path, error)
+func NewTempDir(options ...TempOpt) (Path, error)
 ```
 NewTempDir create temp directory
 
 for cleanup use `defer`
 
-    	tempdir, err := pathutil.NewTempDir(TempOpt{})
+    	tempdir, err := pathutil.NewTempDir()
      defer tempdir.RemoveTree()
+
+if you need set directory or prefix, then use `TempDir` and/or `TempPrefix`
+
+    temp, err := NewTempFile(TempDir("/home/my/test"), TempPrefix("myfile"))
+    ...
 
 #### func  NewTempFile
 
 ```go
-func NewTempFile(options TempOpt) (p Path, err error)
+func NewTempFile(options ...TempOpt) (p Path, err error)
 ```
 NewTempFile create temp file
 
@@ -204,8 +258,13 @@ for cleanup use defer
 
 if you need only temp file name, you must delete file
 
-    temp, err := NewTempFile(TempFileOpt{})
+    temp, err := NewTempFile()
     temp.Remove()
+
+if you need set directory or prefix, then use `TempDir` and/or `TempPrefix`
+
+    temp, err := NewTempFile(TempDir("/home/my/test"), TempPrefix("myfile"))
+    ...
 
 #### type PathImpl
 
@@ -275,11 +334,70 @@ func (path PathImpl) CopyFrom(reader io.Reader) (copyied int64, err error)
 ```
 CopyFrom copy stream from reader to path (file after copy close and sync)
 
-#### func (PathImpl) Crypto
+#### func (PathImpl) CryptoMd5
 
 ```go
-func (path PathImpl) Crypto(hash crypto.Hash) (c *CryptoHash, err error)
+func (path PathImpl) CryptoMd5() (hashutil.Md5, error)
 ```
+CryptoMd5 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Md5](github.com/JaSei/hashutil-go) type
+
+for example print of Md5 hexstring
+
+    hash, err := path.CryptoMd5()
+    fmt.Println(hash)
+
+#### func (PathImpl) CryptoSha1
+
+```go
+func (path PathImpl) CryptoSha1() (hashutil.Sha1, error)
+```
+CryptoSha1 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha1](github.com/JaSei/hashutil-go) type
+
+for example print of Sha1 hexstring
+
+    hash, err := path.CryptoSha1()
+    fmt.Println(hash)
+
+#### func (PathImpl) CryptoSha256
+
+```go
+func (path PathImpl) CryptoSha256() (hashutil.Sha256, error)
+```
+CryptoSha256 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha256](github.com/JaSei/hashutil-go) type
+
+for example print of Sha256 hexstring
+
+    hash, err := path.CryptoSha256()
+    fmt.Println(hash)
+
+#### func (PathImpl) CryptoSha384
+
+```go
+func (path PathImpl) CryptoSha384() (hashutil.Sha384, error)
+```
+CryptoSha384 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha384](github.com/JaSei/hashutil-go) type
+
+for example print of Sha284 hexstring
+
+    hash, err := path.CryptoSha284()
+    fmt.Println(hash)
+
+#### func (PathImpl) CryptoSha512
+
+```go
+func (path PathImpl) CryptoSha512() (hashutil.Sha512, error)
+```
+CryptoSha512 method access hash funcionality like Path::Tiny Digest return
+[hashutil.Sha512](github.com/JaSei/hashutil-go) type
+
+for example print of Sha512 hexstring
+
+    hash, err := path.CryptoSha512()
+    fmt.Println(hash)
 
 #### func (PathImpl) Exists
 
@@ -493,15 +611,25 @@ type ReadSeekCloser interface {
 #### type TempOpt
 
 ```go
-type TempOpt struct {
-	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
-	Dir string
-	// name beginning with prefix
-	Prefix string
-}
+type TempOpt func(*tempOpt)
 ```
 
-TempOpt is struct for configure new tempdir or tempfile
+TempOpt is func for configure tempdir or tempfile
+
+#### func  TempDir
+
+```go
+func TempDir(dir string) TempOpt
+```
+TempDir set directory where is temp file/dir create, empty string `""` (default)
+means TEMPDIR (`os.TempDir`)
+
+#### func  TempPrefix
+
+```go
+func TempPrefix(prefix string) TempOpt
+```
+TempPrefix set name beginning with prefix
 
 #### type VisitFunc
 

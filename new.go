@@ -1,9 +1,11 @@
 package pathutil
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
@@ -16,30 +18,59 @@ import (
 //		path := New("/home/test", ".vimrc")
 //
 //
-// if you can use `Path` in `New`, you must use `.String()` method
-func New(path ...string) (Path, error) {
+// input can be `string` or type implements `fmt.Stringer` interface
+func New(path ...interface{}) (Path, error) {
 	newPath := PathImpl{}
 
-	for index, pathChunk := range path {
+	paths := make([]string, len(path))
+	for index, chunk := range path {
+		var pathChunk string
+		switch t := chunk.(type) {
+		case string:
+			pathChunk = chunk.(string)
+		case fmt.Stringer:
+			pathChunk = chunk.(fmt.Stringer).String()
+		default:
+			return nil, errors.Errorf("Chunk %d is type %t (allowed are string or fmt.Stringer)", index, t)
+		}
+
 		if len(pathChunk) == 0 {
 			return nil, errors.Errorf("Paths requires defined, positive-lengths parts (part %d is empty", index)
 		}
+
+		paths[index] = pathChunk
 	}
 
-	joinPath := filepath.Join(path...)
+	joinPath := filepath.Join(paths...)
+	newPath.path = filepath.Clean(joinPath)
 
-	newPath.path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
+	if runtime.GOOS == "windows" {
+		newPath.path = strings.Replace(newPath.path, "\\", "/", -1)
+	}
 
 	return newPath, nil
 }
 
-//TempOpt is struct for configure new tempdir or tempfile
-type TempOpt struct {
-	// directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
-	Dir string
-	// name beginning with prefix
-	// if prefix includes a "*", the random string replaces the last "*".
-	Prefix string
+type tempOpt struct {
+	dir    string
+	prefix string
+}
+
+//TempOpt is func for configure tempdir or tempfile
+type TempOpt func(*tempOpt)
+
+// TempDir set directory where is temp file/dir create, empty string `""` (default) means TEMPDIR (`os.TempDir`)
+func TempDir(dir string) TempOpt {
+	return func(o *tempOpt) {
+		o.dir = dir
+	}
+}
+
+// TempPrefix set name beginning with prefix
+func TempPrefix(prefix string) TempOpt {
+	return func(o *tempOpt) {
+		o.prefix = prefix
+	}
 }
 
 // NewTempFile create temp file
@@ -49,13 +80,22 @@ type TempOpt struct {
 //		defer temp.Remove()
 //
 // if you need only temp file name, you must delete file
-//		temp, err := NewTempFile(TempFileOpt{})
+//		temp, err := NewTempFile()
 //		temp.Remove()
 //
-func NewTempFile(options TempOpt) (p Path, err error) {
-	file, err := tempFile(options.Dir, options.Prefix)
+// if you need set directory or prefix, then use `TempDir` and/or `TempPrefix`
+//		temp, err := NewTempFile(TempDir("/home/my/test"), TempPrefix("myfile"))
+//		...
+//
+func NewTempFile(options ...TempOpt) (p Path, err error) {
+	opt := tempOpt{}
+	for _, o := range options {
+		o(&opt)
+	}
+
+	file, err := tempFile(opt.dir, opt.prefix)
 	if err != nil {
-		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", options)
+		return nil, errors.Wrapf(err, "NewTempFile(%+v) fail", opt)
 	}
 
 	defer func() {
@@ -70,12 +110,21 @@ func NewTempFile(options TempOpt) (p Path, err error) {
 // NewTempDir create temp directory
 //
 // for cleanup use `defer`
-// 	tempdir, err := pathutil.NewTempDir(TempOpt{})
+// 	tempdir, err := pathutil.NewTempDir()
 //  defer tempdir.RemoveTree()
-func NewTempDir(options TempOpt) (Path, error) {
-	dir, err := ioutil.TempDir(options.Dir, options.Prefix)
+//
+// if you need set directory or prefix, then use `TempDir` and/or `TempPrefix`
+//		temp, err := NewTempFile(TempDir("/home/my/test"), TempPrefix("myfile"))
+//		...
+func NewTempDir(options ...TempOpt) (Path, error) {
+	opt := tempOpt{}
+	for _, o := range options {
+		o(&opt)
+	}
+
+	dir, err := ioutil.TempDir(opt.dir, opt.prefix)
 	if err != nil {
-		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", options)
+		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", opt)
 	}
 
 	return New(dir)
@@ -112,8 +161,8 @@ func Home(subpath ...string) (Path, error) {
 	return New(join(home, subpath)...)
 }
 
-func join(a string, b []string) []string {
-	p := make([]string, len(b)+1)
+func join(a string, b []string) []interface{} {
+	p := make([]interface{}, len(b)+1)
 	p[0] = a
 	for i, c := range b {
 		p[i+1] = c

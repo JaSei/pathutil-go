@@ -7,14 +7,14 @@ import (
 )
 
 func TestMakePath(t *testing.T) {
-	tempdir, err := NewTempDir(TempOpt{})
+	tempdir, err := NewTempDir()
 	assert.NoError(t, err)
 
 	defer func() {
 		assert.NoError(t, tempdir.RemoveTree())
 	}()
 
-	newPath, err := New(tempdir.String(), "a/b/c")
+	newPath, err := New(tempdir, "a/b/c")
 	assert.NoError(t, err)
 
 	assert.False(t, newPath.Exists())

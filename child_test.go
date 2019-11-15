@@ -7,7 +7,7 @@ import (
 )
 
 func TestChild(t *testing.T) {
-	tempdir, err := NewTempDir(TempOpt{})
+	tempdir, err := NewTempDir()
 	assert.NoError(t, err)
 
 	defer func() {
@@ -22,7 +22,7 @@ func TestChild(t *testing.T) {
 }
 
 func TestChildren(t *testing.T) {
-	tempdir, err := NewTempDir(TempOpt{})
+	tempdir, err := NewTempDir()
 	assert.NoError(t, err)
 
 	defer func() {
