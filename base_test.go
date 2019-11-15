@@ -3,6 +3,7 @@ package pathutil
 import (
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -30,7 +31,12 @@ func TestCanonpath(t *testing.T) {
 	assert.Equal(t, fmt.Sprintf("tmp%stest", string(filepath.Separator)), path.Canonpath(), "more paths elemets")
 
 	path, _ = New("tmp\\test")
-	assert.Equal(t, fmt.Sprintf("tmp%stest", string(filepath.Separator)), path.Canonpath(), "windows rel path")
+	assert.Equal(t, "tmp\\test", path.Canonpath(), "windows rel path")
+	if runtime.GOOS == "windows" {
+		assert.Equal(t, "tmp/test", path.String(), "windows backshlash are internaly represents as slash")
+	} else {
+		assert.Equal(t, "tmp\\test", path.String(), "backshlash in linux path is allowed")
+	}
 }
 
 func TestBasename(t *testing.T) {

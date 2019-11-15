@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
@@ -41,8 +42,11 @@ func New(path ...interface{}) (Path, error) {
 	}
 
 	joinPath := filepath.Join(paths...)
+	newPath.path = filepath.Clean(joinPath)
 
-	newPath.path = strings.Replace(filepath.Clean(joinPath), "\\", "/", -1)
+	if runtime.GOOS == "windows" {
+		newPath.path = strings.Replace(newPath.path, "\\", "/", -1)
+	}
 
 	return newPath, nil
 }
