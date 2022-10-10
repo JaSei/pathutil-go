@@ -1,7 +1,7 @@
 package pathutil
 
 import (
-	"io/ioutil"
+	"os"
 )
 
 func (path PathImpl) Child(childName ...string) (Path, error) {
@@ -15,7 +15,7 @@ func (path PathImpl) Child(childName ...string) (Path, error) {
 }
 
 func (path PathImpl) Children() ([]Path, error) {
-	files, err := ioutil.ReadDir(path.Canonpath())
+	files, err := os.ReadDir(path.Canonpath())
 	if err != nil {
 		return nil, err
 	}

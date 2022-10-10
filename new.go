@@ -2,7 +2,6 @@ package pathutil
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -127,7 +126,7 @@ func NewTempDir(options ...TempOpt) (Path, error) {
 		o(&opt)
 	}
 
-	dir, err := ioutil.TempDir(opt.dir, opt.prefix)
+	dir, err := os.MkdirTemp(opt.dir, opt.prefix)
 	if err != nil {
 		return nil, errors.Wrapf(err, "NewTempDir(%+v) fail", opt)
 	}

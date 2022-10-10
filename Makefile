@@ -15,8 +15,8 @@ else
 endif
 
 setup: ## Install all the build and lint dependencies
-	go get -u golang.org/x/tools/cmd/cover
-	go get -u github.com/robertkrimen/godocdown/godocdown
+	go install golang.org/x/tools/cmd/cover@latest
+	go install github.com/robertkrimen/godocdown/godocdown@latest
 
 	go mod download
 

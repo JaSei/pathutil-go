@@ -554,13 +554,15 @@ Rename path to new path
 ```go
 func (path PathImpl) Slurp() (string, error)
 ```
-Slurp read all file like ioutil.ReadFile
+Slurp read the whole file and return content as string
 
 #### func (PathImpl) SlurpBytes
 
 ```go
 func (path PathImpl) SlurpBytes() ([]byte, error)
 ```
+SlurpBytes reads the whole file and return content slice of bytes like
+os.ReadFile
 
 #### func (PathImpl) Spew
 
