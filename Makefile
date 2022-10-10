@@ -1,9 +1,7 @@
 HELP?=$$(go run main.go --help 2>&1)
 VERSION?=$$(cat VERSION)
-DEP?=$$(which dep)
 LINTER?=$$(which golangci-lint)
-LINTER_VERSION=1.15.0
-export GO15VENDOREXPERIMENT=1
+LINTER_VERSION=1.50.0
 
 ifeq ($(OS),Windows_NT)
 	DEP_VERS=dep-windows-amd64.exe
@@ -23,11 +21,7 @@ setup: ## Install all the build and lint dependencies
 	go get -u golang.org/x/tools/cmd/cover
 	go get -u github.com/robertkrimen/godocdown/godocdown
 
-	@if [ "$(DEP)" = "" ]; then\
-		curl -L https://github.com/golang/dep/releases/download/v0.5.1/$(DEP_VERS) >| $$GOPATH/bin/dep;\
-		chmod +x $$GOPATH/bin/dep;\
-	fi
-	dep ensure -v
+	go mod download
 
 	@if [ "$(LINTER)" = "" ]; then\
 		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\
