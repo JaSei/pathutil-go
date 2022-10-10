@@ -24,7 +24,9 @@ setup: ## Install all the build and lint dependencies
 generate: ## Generate README.md
 	godocdown >| README.md
 
-test: generate ## Run all the tests
+test: generate test_only ## Run all the tests
+
+test_only: ## Run tests only (skip generate readme)
 	echo 'mode: atomic' > coverage.txt && go list ./... | grep -v vendor | xargs -n1 -I{} sh -c 'go test -covermode=atomic -coverprofile=coverage.tmp {} && tail -n +2 coverage.tmp >> coverage.txt' && rm coverage.tmp
 
 cover: test ## Run all the tests and opens the coverage report
@@ -41,7 +43,7 @@ lint: ## Run all the linters
 
 	golangci-lint run
 
-ci: test ## Run all the tests but no linters - use https://golangci.com integration instead
+ci: test_only ## Run all the tests but no linters (use https://golangci.com integration instead) and no generate
 
 build: ## Build the app
 	go build
