@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/release/JaSei/pathutil-go.svg?style=flat-square)](https://github.com/JaSei/pathutil-go/releases/latest)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Travis](https://img.shields.io/travis/JaSei/pathutil-go.svg?style=flat-square)](https://travis-ci.org/JaSei/pathutil-go)
+![GitHub Actions](https://github.com/JaSei/pathutil-go/actions/workflows/workflow/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/JaSei/pathutil-go?style=flat-square)](https://goreportcard.com/report/github.com/JaSei/pathutil-go)
 [![GoDoc](https://godoc.org/github.com/JaSei/pathutil-go?status.svg&style=flat-square)](http://godoc.org/github.com/JaSei/pathutil-go)
 [![codecov.io](https://codecov.io/github/JaSei/pathutil-go/coverage.svg?branch=master)](https://codecov.io/github/JaSei/pathutil-go?branch=master)
