@@ -20,10 +20,6 @@ setup: ## Install all the build and lint dependencies
 
 	go mod download
 
-	@if [ "$(LINTER)" = "" ]; then\
-		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\
-		chmod +x $$GOPATH/bin/golangci-lint;\
-	fi
 
 generate: ## Generate README.md
 	godocdown >| README.md
@@ -38,6 +34,11 @@ fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
 
 lint: ## Run all the linters
+	@if [ "$(LINTER)" = "" ]; then\
+		curl -L https://github.com/golangci/golangci-lint/releases/download/v$(LINTER_VERSION)/$(LINTER_FILE) $(LINTER_UNPACK) ;\
+		chmod +x $$GOPATH/bin/golangci-lint;\
+	fi
+
 	golangci-lint run
 
 ci: test ## Run all the tests but no linters - use https://golangci.com integration instead
