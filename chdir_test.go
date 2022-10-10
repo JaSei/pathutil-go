@@ -1,6 +1,7 @@
 package pathutil
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -30,5 +31,10 @@ func TestChdir(t *testing.T) {
 	actualCwd, err := Cwd()
 	assert.NoError(t, err)
 
-	assert.Equal(t, tempdir, actualCwd, "Actual current working directory is tempdir")
+	tempdirStr, err := filepath.EvalSymlinks(tempdir.String())
+	assert.NoError(t, err)
+	actualCwdStr, err := filepath.EvalSymlinks(actualCwd.String())
+	assert.NoError(t, err)
+
+	assert.Equal(t, tempdirStr, actualCwdStr, "Actual current working directory is tempdir")
 }
