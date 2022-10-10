@@ -4,15 +4,12 @@ LINTER?=$$(which golangci-lint)
 LINTER_VERSION=1.50.0
 
 ifeq ($(OS),Windows_NT)
-	DEP_VERS=dep-windows-amd64.exe
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-windows-amd64.zip
 	LINTER_UNPACK= >| app.zip; unzip -j app.zip -d $$GOPATH/bin; rm app.zip
 else ifeq ($(OS), Darwin)
-	DEP_VERS=dep-darwin-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-darwin-amd64.tar.gz
 	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 else
-	DEP_VERS=dep-linux-amd64
 	LINTER_FILE=golangci-lint-$(LINTER_VERSION)-linux-amd64.tar.gz
 	LINTER_UNPACK= | tar xzf - -C $$GOPATH/bin --wildcards --strip 1 "**/golangci-lint"
 endif
