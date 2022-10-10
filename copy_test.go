@@ -10,14 +10,14 @@ import (
 func TestCopyFileDstFileExists(t *testing.T) {
 	src, _ := New("copy_test.go")
 	dst, err := NewTempFile()
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	defer func() {
 		assert.NoError(t, dst.Remove())
 	}()
 
 	assert.Exactly(t, true, dst.Exists(), "dst file exists before copy")
 	newDst, err := src.CopyFile(dst.String())
-	if !assert.Nil(t, err) {
+	if !assert.NoError(t, err) {
 		return
 	}
 
@@ -31,7 +31,7 @@ func TestCopyFileDstIsDir(t *testing.T) {
 
 	assert.Exactly(t, true, dst.Exists(), "dst dir exists")
 	newDst, err := src.CopyFile(dst.String())
-	if !assert.Nil(t, err) {
+	if !assert.NoError(t, err) {
 		return
 	}
 
